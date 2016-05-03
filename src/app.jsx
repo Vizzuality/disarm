@@ -64,14 +64,14 @@ class App extends React.Component {
     //   new Date(Math.max(this.state.ranges.donations[1], this.state.ranges.projects[1]))
     // ];
 
-    var updateTimelineDates = function(dates) {
+    const updateTimelineDates = function(dates) {
       this.setState({ timelineDates: dates });
       router.update({
         timelineDate: moment.utc(dates.to).format('YYYY-MM-DD')
       });
     };
 
-    var updateMapDates = function (dates) {
+    const updateMapDates = function (dates) {
       this.setState({ mapDates: dates });
       //MAP STATE CHANGE
       // console.log(dates);
