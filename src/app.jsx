@@ -1,16 +1,17 @@
 'use strict';
 
-import './styles.postcss';
+import './styles/layout.postcss';
 
 import _ from 'underscore';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import moment from 'moment';
 import Map from './components/Map';
-// import Dashboard from './components/Dashboard';
+import Dashboard from './components/Dashboard';
 import TimelineView from './components/Timeline';
 import Router from './components/Router';
 import layersData from './layerSpec.json';
+import LayersSpecCollection from './components/Map/LayersSpecCollection';
 
 const mapOptions = {
   center: [40, -3],
@@ -47,13 +48,33 @@ class App extends React.Component {
 
   constructor(props) {
     super(props);
+
+    this.layersSpecCollection = LayersSpecCollection;
+    this.layersSpecCollection.set(layersData);
+
+    this._setListeners();
+  }
+
+  _setListeners() {
+    this.layersSpecCollection.on('change reset', () => {
+      console.log('change');
+      this.refs.Map.updateLayers();
+      // this.updateRouter();
+    }).bind(this);
   }
 
   componentWillMount() {
     router.start();
+    this.setState(router.params.attributes);
+    router.on('route', () => {
+      this.setState(router.params.attributes);
+    });
+
+    this._getRouterParams();
   }
 
   updateRouter() {
+    // console.log('updateRouter');
     const params = this.refs.Map.state;
     router.update(params);
   }
@@ -110,23 +131,56 @@ class App extends React.Component {
 
   componentDidMount() {
     this._initTimeline();
+    this.updateRouter();
+  }
+
+  activeLayer(layer) {
+    this.layersSpecCollection.setCurrentLayer(layer.slug);
+  }
+
+  _getRouterParams() {
+
+    const center = router.params.get('lat') ?
+      [router.params.get('lat'), router.params.get('lng')] : mapOptions.center;
+    const zoom = router.params.get('zoom') ? router.params.get('zoom') : mapOptions.zoom;
+    const layer = router.params.get('layer') || this.layersSpecCollection.getCurrentLayer().slug;
+
+    var newMapOptions = _.extend(mapOptions, {
+      center: center[0] ? center : mapOptions.center,
+      zoom: router.params.get('zoom')  || mapOptions.zoom,
+      layer: layer
+    });
+
+    // console.log(newMapOptions);
+
+    this.setState({
+      mapOptions: newMapOptions
+    });
   }
 
   render() {
     // Getting params from router before render map
     // const center = [router.params.get('lat'), router.params.get('lng')];
-    // const options = _.extend({}, mapOptions, {
-    //   center: center,
-    //   zoom: router.params.get('zoom')
+    // const layer = [router.params.get('layer')]
+    //
+    // _.extend(mapOptions, {
+    //   center: center[0] ? center : mapOptions.center,
+    //   zoom: router.params.get('zoom')  || mapOptions.zoom,
+    //   layer: layer
     // });
+
     return (
       <div>
         <div className="l-app">
           <Map ref="Map"
             mapOptions={ mapOptions }
-            layersData={ layersData }
             onLoad={ this.updateRouter.bind(this) }
-            onChange={ this.updateRouter.bind(this) } />
+            onChange={ this.updateRouter.bind(this) }
+          />
+          <Dashboard
+            layersSpecCollection = { this.layersSpecCollection }
+            setLayer = { this.activeLayer.bind(this) }
+          />
           <div id="timeline" className="l-timeline m-timeline" ref="Timeline">
             <svg className="btn js-button">
               <use xlinkHref="#icon-play" className="js-button-icon"></use>
@@ -137,7 +191,6 @@ class App extends React.Component {
       </div>
     );
   }
-
 }
 
 // Initializing app
