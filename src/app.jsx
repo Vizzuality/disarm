@@ -140,7 +140,7 @@ class App extends React.Component {
   }
 
   activeLayer(layer) {
-    this.state.layersSpecCollection.setCurrentLayer(layer.slug);
+    this.state.layersSpecCollection.setCurrentLayer(layer);
   }
 
   _getRouterParams() {

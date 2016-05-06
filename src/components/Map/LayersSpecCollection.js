@@ -53,23 +53,17 @@ class LayersSpecCollection extends Backbone.Collection {
     });
   }
 
-  // set every layer to active: false but the current one
-  setCurrentLayer(slug) {
+  setCurrentLayer(layer) {
 
     const layerClone = _.clone(this.toJSON());
 
     _.each(layerClone, (layerSpec, i) => {
-      layerSpec.active = false;
+      if (layerSpec.slug == layer.slug) {
+        layerSpec.active = layer.active;
+      }
     });
 
-    const currentLayer = _.find(layerClone, {slug: slug});
-
-    if (currentLayer) {
-      currentLayer.active = true;
-    }
-
     this.reset(layerClone);
-
   }
 }
 
