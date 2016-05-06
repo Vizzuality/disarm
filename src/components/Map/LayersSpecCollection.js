@@ -19,13 +19,12 @@ class LayersSpecCollection extends Backbone.Collection {
     const layer = this.getLayer(id);
     // Trying to not create a new instance every time
     if (!layer && layerSpec && !layerSpec.instancedLayer) {
-      layerSpec.instanceLayer().createLayer((l) => {
-        this.subscriber.addLayer(l);
-        this._layers[id] = l;
-      });
-    } else if (!layer && layerSpec && layerSpec.instancedLayer &&
-      layerSpec.instancedLayer.layer) {
-
+      layerSpec.instanceLayer()
+        .createLayer((l) => {
+          this.subscriber.addLayer(l);
+          this._layers[id] = l;
+        });
+    } else if (!layer && layerSpec && layerSpec.instancedLayer) {
       this.subscriber.addLayer(layerSpec.instancedLayer.layer);
       this._layers[id] = layerSpec.instancedLayer.layer;
     }
@@ -70,9 +69,8 @@ class LayersSpecCollection extends Backbone.Collection {
     }
 
     this.reset(layerClone);
-    console.log(layerClone);
-  }
 
+  }
 }
 
 LayersSpecCollection.prototype.model = LayerSpecModel;

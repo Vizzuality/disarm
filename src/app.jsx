@@ -49,15 +49,20 @@ class App extends React.Component {
   constructor(props) {
     super(props);
 
-    this.layersSpecCollection = LayersSpecCollection;
-    this.layersSpecCollection.set(layersData);
+    const layersSpecCollection = LayersSpecCollection;
+    layersSpecCollection.set(layersData);
+
+    this.state = {
+      layersSpecCollection: layersSpecCollection,
+      mapOptions: mapOptions
+    };
 
     this._setListeners();
   }
 
   _setListeners() {
-    this.layersSpecCollection.on('change reset', () => {
-      console.log('change');
+
+    this.state.layersSpecCollection.on('change reset', () => {
       this.refs.Map.updateLayers();
       // this.updateRouter();
     }).bind(this);
@@ -74,7 +79,7 @@ class App extends React.Component {
   }
 
   updateRouter() {
-    // console.log('updateRouter');
+    console.log('updateRouter');
     const params = this.refs.Map.state;
     router.update(params);
   }
@@ -135,26 +140,19 @@ class App extends React.Component {
   }
 
   activeLayer(layer) {
-    this.layersSpecCollection.setCurrentLayer(layer.slug);
+    this.state.layersSpecCollection.setCurrentLayer(layer.slug);
   }
 
   _getRouterParams() {
-
     const center = router.params.get('lat') ?
       [router.params.get('lat'), router.params.get('lng')] : mapOptions.center;
     const zoom = router.params.get('zoom') ? router.params.get('zoom') : mapOptions.zoom;
-    const layer = router.params.get('layer') || this.layersSpecCollection.getCurrentLayer().slug;
+    const layer = router.params.get('layer') || this.state.layersSpecCollection.getCurrentLayer().slug;
 
     var newMapOptions = _.extend(mapOptions, {
       center: center[0] ? center : mapOptions.center,
-      zoom: router.params.get('zoom')  || mapOptions.zoom,
+      zoom: router.params.get('zoom') || mapOptions.zoom,
       layer: layer
-    });
-
-    // console.log(newMapOptions);
-
-    this.setState({
-      mapOptions: newMapOptions
     });
   }
 
@@ -178,7 +176,7 @@ class App extends React.Component {
             onChange={ this.updateRouter.bind(this) }
           />
           <Dashboard
-            layersSpecCollection = { this.layersSpecCollection }
+            layersSpecCollection = { this.state.layersSpecCollection }
             setLayer = { this.activeLayer.bind(this) }
           />
           <div id="timeline" className="l-timeline m-timeline" ref="Timeline">
