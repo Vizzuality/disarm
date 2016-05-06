@@ -1,5 +1,7 @@
 'use strict';
 
+import './styles.postcss';
+
 import React from 'react';
 
 class Share extends React.Component {

@@ -34,7 +34,7 @@ class SwitcherLayers extends React.Component {
     }.bind(this));
 
     return (
-      <ul className="c-switcher">
+      <ul className="l-switcher">
         {SwitcherItemsNodes}
       </ul>
     );
