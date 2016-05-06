@@ -17,7 +17,7 @@ class Map extends React.Component {
       lat: props.mapOptions.center[0],
       lng: props.mapOptions.center[1],
       zoom: props.mapOptions.zoom,
-      layer: props.mapOptions.layer
+      activeLayers: props.activeLayers
     };
   }
 
@@ -43,6 +43,8 @@ class Map extends React.Component {
     this.setState(nextState);
     this.props.onChange(nextState);
     });
+
+    console.log(this.state)
 
     // Hack -> because on "load" doesn't work -.-
     setTimeout(() => this.map.fire('load'), 0);
@@ -77,13 +79,17 @@ class Map extends React.Component {
    * This method will update all layers
    */
   setLayers() {
-    _.each(this.layerSpecCollection.models, layerSpec => {
+   _.each(this.layerSpecCollection.models, layerSpec => {
       if (!layerSpec.get('active')) {
         this.removeLayer(layerSpec.id);
       } else {
         this.addLayer(layerSpec.id);
       }
     });
+
+    const activeLayers = (this.layerSpecCollection.models).filter( (model) => model.attributes.active ).map( model => model.attributes.slug );
+    this.setState({ activeLayers: activeLayers})
+
   }
 
   /**

@@ -54,7 +54,8 @@ class App extends React.Component {
 
     this.state = {
       layersSpecCollection: layersSpecCollection,
-      mapOptions: mapOptions
+      mapOptions: mapOptions,
+      activeLayers: []
     };
 
     this._setListeners();
@@ -79,7 +80,7 @@ class App extends React.Component {
   }
 
   updateRouter() {
-    console.log('updateRouter');
+    console.log('updateRouter', params);
     const params = this.refs.Map.state;
     router.update(params);
   }
@@ -147,12 +148,10 @@ class App extends React.Component {
     const center = router.params.get('lat') ?
       [router.params.get('lat'), router.params.get('lng')] : mapOptions.center;
     const zoom = router.params.get('zoom') ? router.params.get('zoom') : mapOptions.zoom;
-    const layer = router.params.get('layer') || this.state.layersSpecCollection.getCurrentLayer().slug;
 
     var newMapOptions = _.extend(mapOptions, {
       center: center[0] ? center : mapOptions.center,
       zoom: router.params.get('zoom') || mapOptions.zoom,
-      layer: layer
     });
   }
 
@@ -166,14 +165,16 @@ class App extends React.Component {
     //   zoom: router.params.get('zoom')  || mapOptions.zoom,
     //   layer: layer
     // });
+    //
 
     return (
       <div>
         <div className="l-app">
           <Map ref="Map"
             mapOptions={ mapOptions }
-            onLoad={ this.updateRouter.bind(this) }
-            onChange={ this.updateRouter.bind(this) }
+            activeLayers = { this.state.activeLayers }
+            // onLoad={ this.updateRouter.bind(this) }
+            // onChange={ this.updateRouter.bind(this) }
           />
           <Dashboard
             layersSpecCollection = { this.state.layersSpecCollection }
