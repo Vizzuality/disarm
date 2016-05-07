@@ -58,14 +58,12 @@ class App extends React.Component {
       activeLayers: []
     };
 
-    this._setListeners();
+    // this._setListeners();
   }
 
   _setListeners() {
-
     this.state.layersSpecCollection.on('change reset', () => {
       this.refs.Map.updateLayers();
-      // this.updateRouter();
     }).bind(this);
   }
 
@@ -79,10 +77,8 @@ class App extends React.Component {
     this._getRouterParams();
   }
 
-  updateRouter() {
-    console.log('updateRouter', params);
-    const params = this.refs.Map.state;
-    router.update(params);
+  updateRouter(params) {
+    // router.update(params);
   }
 
   _initTimeline() {
@@ -93,9 +89,9 @@ class App extends React.Component {
 
     const updateTimelineDates = function(dates) {
       this.setState({ timelineDates: dates });
-      router.update({
-        timelineDate: moment.utc(dates.to).format('YYYY-MM-DD')
-      });
+      // router.update({
+      //   timelineDate: moment.utc(dates.to).format('YYYY-MM-DD')
+      // });
     };
 
     const updateMapDates = function (dates) {
@@ -137,7 +133,7 @@ class App extends React.Component {
 
   componentDidMount() {
     this._initTimeline();
-    this.updateRouter();
+    this._setListeners();
   }
 
   activeLayer(layer) {
@@ -145,14 +141,25 @@ class App extends React.Component {
   }
 
   _getRouterParams() {
-    const center = router.params.get('lat') ?
-      [router.params.get('lat'), router.params.get('lng')] : mapOptions.center;
-    const zoom = router.params.get('zoom') ? router.params.get('zoom') : mapOptions.zoom;
-
-    var newMapOptions = _.extend(mapOptions, {
-      center: center[0] ? center : mapOptions.center,
-      zoom: router.params.get('zoom') || mapOptions.zoom,
+    const newMapOptions = _.extend(mapOptions, {
+      center: router.params.get('lat') ? [router.params.get('lat'), router.params.get('lng')] : mapOptions.center,
+      zoom: router.params.get('zoom') ? router.params.get('zoom') : mapOptions.zoom
     });
+
+    const activeLayers = router.params.get('activeLayers') ? router.params.get('activeLayers') : [];
+
+    const newState = _.extend({}, newMapOptions, activeLayers);
+
+    if (activeLayers) {
+      _.each(activeLayers, _.bind(function(layer) {
+        const currentLayer = _.where(this.state.layersSpecCollection.toJSON(), { slug: layer })[0];
+        currentLayer.active = true;
+        this.activeLayer(currentLayer);
+      }, this))
+    }
+
+    this.setState(newState);
+
   }
 
   render() {
@@ -174,7 +181,7 @@ class App extends React.Component {
             mapOptions={ mapOptions }
             activeLayers = { this.state.activeLayers }
             // onLoad={ this.updateRouter.bind(this) }
-            // onChange={ this.updateRouter.bind(this) }
+            onChange={ this.updateRouter.bind(this) }
           />
           <Dashboard
             layersSpecCollection = { this.state.layersSpecCollection }

@@ -54,7 +54,6 @@ class LayersSpecCollection extends Backbone.Collection {
   }
 
   setCurrentLayer(layer) {
-
     const layerClone = _.clone(this.toJSON());
 
     _.each(layerClone, (layerSpec, i) => {
