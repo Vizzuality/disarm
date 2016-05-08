@@ -5,6 +5,7 @@ import './styles.postcss';
 import _ from 'underscore';
 import React from 'react';
 import SwitcherLayers from './SwitcherLayers';
+import Chart from './../Chart';
 import Share from './Share';
 
 class Dashboard extends React.Component {
@@ -12,7 +13,7 @@ class Dashboard extends React.Component {
   constructor(props) {
     super(props);
   }
-  
+
   render() {
     return (
       <div id="dashboard" className="l-dashboard c-dashboard">
@@ -21,6 +22,7 @@ class Dashboard extends React.Component {
           setLayer={ this.props.setLayer.bind(this) }
         />
         <Share />
+        <Chart />
       </div>
     );
   }
