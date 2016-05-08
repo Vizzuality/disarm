@@ -17,7 +17,7 @@ class Map extends React.Component {
       lat: props.mapOptions.center[0],
       lng: props.mapOptions.center[1],
       zoom: props.mapOptions.zoom,
-      activeLayers: props.activeLayers
+      layers: props.layers
     };
   }
 
@@ -86,11 +86,11 @@ class Map extends React.Component {
       }
     });
 
-    const activeLayers = (this.layerSpecCollection.models).filter( (model) => model.attributes.active ).map( model => model.attributes.slug );
-    this.setState({ activeLayers: activeLayers});
+    const layers = (this.layerSpecCollection.models).filter( (model) => model.attributes.active ).map( model => model.attributes.slug );
+    this.setState({ layers: layers});
 
     //Set router params thorugh App method
-    this.props.onChange({ activeLayers: activeLayers });
+    this.props.onChange({ layers: layers });
   }
 
   /**

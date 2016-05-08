@@ -55,7 +55,7 @@ class App extends React.Component {
     this.state = {
       layersSpecCollection: layersSpecCollection,
       mapOptions: mapOptions,
-      activeLayers: []
+      layers: []
     };
 
     // this._setListeners();
@@ -146,15 +146,17 @@ class App extends React.Component {
       zoom: router.params.get('zoom') ? router.params.get('zoom') : mapOptions.zoom
     });
 
-    const activeLayers = router.params.get('activeLayers') ? router.params.get('activeLayers') : [];
+    const layers = router.params.get('layers') ? router.params.get('layers') : [];
 
-    const newState = _.extend({}, newMapOptions, activeLayers);
+    console.log(layers)
+
+    const newState = _.extend({}, newMapOptions, layers);
 
     //TODO: avoid string at router params when only one layer active.
 
     //This is to active a new layer and set it to collection.
-    if (activeLayers) {
-      _.each(activeLayers, _.bind(function(layer) {
+    if (layers) {
+      _.each(layers, _.bind(function(layer) {
         const currentLayer = _.where(this.state.layersSpecCollection.toJSON(), { slug: layer })[0];
         currentLayer.active = true;
         this.activeLayer(currentLayer);
@@ -182,7 +184,7 @@ class App extends React.Component {
         <div className="l-app">
           <Map ref="Map"
             mapOptions={ mapOptions }
-            activeLayers = { this.state.activeLayers }
+            layers = { this.state.layers }
             // onLoad={ this.updateRouter.bind(this) }
             onChange={ this.updateRouter.bind(this) }
           />
