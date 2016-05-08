@@ -78,7 +78,7 @@ class App extends React.Component {
   }
 
   updateRouter(params) {
-    // router.update(params);
+    router.update(params);
   }
 
   _initTimeline() {
@@ -150,6 +150,9 @@ class App extends React.Component {
 
     const newState = _.extend({}, newMapOptions, activeLayers);
 
+    //TODO: avoid string at router params when only one layer active.
+
+    //This is to active a new layer and set it to collection.
     if (activeLayers) {
       _.each(activeLayers, _.bind(function(layer) {
         const currentLayer = _.where(this.state.layersSpecCollection.toJSON(), { slug: layer })[0];
