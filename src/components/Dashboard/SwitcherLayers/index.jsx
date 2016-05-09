@@ -10,17 +10,6 @@ class SwitcherLayers extends React.Component {
     super(props);
   }
 
-  // _updateStatus(params) {
-  //   const layerSpec = this.props.layersData.find((layer, i) => {
-  //     return layer.name == params.name;
-  //   });
-  //
-  //   if (layerSpec) {
-  //     layerSpec.active =  params.active;
-  //   }
-  //   this.props.onChange(this.props.layersData);
-  // }
-
   render() {
     const layersSpecCollection= LayersSpecCollection.toJSON();
 

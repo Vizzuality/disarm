@@ -1,0 +1,39 @@
+@import './../../../styles/settings.postcss';
+@import './../../../styles/buttons.postcss';
+
+.c-table {
+
+  > h2 {
+    font-family: $font-family-1;
+    text-transform: uppercase;
+    color: $font-color-1;
+  }
+
+  > table {
+    width: 100%;
+    border-collpase: separate;
+    border: rem(1) $color-4 solid;
+  }
+
+  > table thead {
+    > tr {
+      text-transform: uppercase;
+    }
+  }
+
+  tbody {
+    tr {
+      border: rem(1) $color-4 solid;
+      height: rem(30)
+    }
+  }
+
+  .table-buttons {
+    display: flex;
+    justify-content: center;
+    margin-top: rem(15);
+    > .btn {
+      margin: 0 rem(10);
+    }
+  }
+}
