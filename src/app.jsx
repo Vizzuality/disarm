@@ -8,6 +8,8 @@ import ReactDOM from 'react-dom';
 import moment from 'moment';
 import Map from './components/Map';
 import Dashboard from './components/Dashboard';
+import DownloadInfoWindow from './components/Infowindow/Download';
+import TableInfoWindow from './components/Infowindow/Table';
 import TimelineView from './components/Timeline';
 import Router from './components/Router';
 import layersData from './layerSpec.json';
@@ -54,7 +56,13 @@ class App extends React.Component {
 
     this.state = {
       layersSpecCollection: layersSpecCollection,
-      mapOptions: mapOptions
+      mapOptions: mapOptions,
+      downloadInfoWindow: {
+        isHidden: true
+      },
+      tableInfoWindow: {
+        isHidden: true
+      }
     };
 
     this._setListeners();
@@ -143,6 +151,14 @@ class App extends React.Component {
     this.state.layersSpecCollection.setCurrentLayer(layer);
   }
 
+  handleInfowindow(modal) {
+    this.state[modal] = {
+      isHidden: !this.state[modal].isHidden
+    };
+
+    this.setState(this.state);
+  }
+
   _getRouterParams() {
     const center = router.params.get('lat') ?
       [router.params.get('lat'), router.params.get('lng')] : mapOptions.center;
@@ -170,6 +186,14 @@ class App extends React.Component {
     return (
       <div>
         <div className="l-app">
+          <TableInfoWindow
+            isHidden= {this.state.tableInfoWindow.isHidden}
+            onClose={this.handleInfowindow.bind(this, 'tableInfoWindow')}
+           />
+          <DownloadInfoWindow
+            isHidden= {this.state.downloadInfoWindow.isHidden}
+            onClose={this.handleInfowindow.bind(this, 'downloadInfoWindow')}
+          />
           <Map ref="Map"
             mapOptions={ mapOptions }
             onLoad={ this.updateRouter.bind(this) }
@@ -178,6 +202,7 @@ class App extends React.Component {
           <Dashboard
             layersSpecCollection = { this.state.layersSpecCollection }
             setLayer = { this.activeLayer.bind(this) }
+            openModal = { this.handleInfowindow.bind(this)}
           />
           <div id="timeline" className="l-timeline m-timeline" ref="Timeline">
             <svg className="btn js-button">

@@ -14,12 +14,16 @@ class Share extends React.Component {
     window.print();
   }
 
+  shouldComponentUpdate() {
+    return false;
+  }
+
   render() {
     return (
       <div className="c-share">
-        <button id="btn-download" class="btn -download">download</button>
-        <button onClick={this._onPrint} class="btn -print">print</button>
-        <button id="btn-table" class="btn -table">table</button>
+        <button onClick={this.props.openModal.bind(this, 'downloadInfoWindow')} id="btn-download" className="btn">download</button>
+        <button onClick={this._onPrint} className="btn">print</button>
+        <button onClick={this.props.openModal.bind(this, 'tableInfoWindow')} id="btn-table" className="btn">table</button>
       </div>
     );
   }

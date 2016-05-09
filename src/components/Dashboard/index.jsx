@@ -12,7 +12,7 @@ class Dashboard extends React.Component {
   constructor(props) {
     super(props);
   }
-  
+
   render() {
     return (
       <div id="dashboard" className="l-dashboard c-dashboard">
@@ -20,7 +20,9 @@ class Dashboard extends React.Component {
         <SwitcherLayers
           setLayer={ this.props.setLayer.bind(this) }
         />
-        <Share />
+        <Share
+          openModal = { this.props.openModal }
+         />
       </div>
     );
   }

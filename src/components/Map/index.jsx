@@ -103,7 +103,6 @@ class Map extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log('componentWillReceiveProps');
     const nextState = {
       lat: nextProps.mapOptions.center[0],
       lng: nextProps.mapOptions.center[1],
