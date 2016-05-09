@@ -148,11 +148,10 @@ class App extends React.Component {
 
     const layers = router.params.get('layers') ? router.params.get('layers') : [];
 
-    console.log(layers)
+    console.log(layers);
+    //TODO: desactivate default layer.
 
     const newState = _.extend({}, newMapOptions, layers);
-
-    //TODO: avoid string at router params when only one layer active.
 
     //This is to active a new layer and set it to collection.
     if (layers) {
