@@ -17,7 +17,7 @@ class Map extends React.Component {
       lat: props.mapOptions.center[0],
       lng: props.mapOptions.center[1],
       zoom: props.mapOptions.zoom,
-      layer: props.mapOptions.layer
+      layers: props.layers
     };
   }
 
@@ -41,7 +41,7 @@ class Map extends React.Component {
         lat: center.lat
       };
     this.setState(nextState);
-    this.props.onChange(nextState);
+    this.props.onChange(nextState)
     });
 
     // Hack -> because on "load" doesn't work -.-
@@ -65,7 +65,7 @@ class Map extends React.Component {
     this.setLayers();
 
     // to update the router with new params
-    console.log(this.state);
+    // console.log(this.state);
     // this.props.onChange(this.state);
   }
 
@@ -77,13 +77,20 @@ class Map extends React.Component {
    * This method will update all layers
    */
   setLayers() {
-    _.each(this.layerSpecCollection.models, layerSpec => {
+
+   _.each(this.layerSpecCollection.models, layerSpec => {
       if (!layerSpec.get('active')) {
         this.removeLayer(layerSpec.id);
       } else {
         this.addLayer(layerSpec.id);
       }
     });
+
+    const layers = (this.layerSpecCollection.models).filter( (model) => model.attributes.active ).map( model => model.attributes.slug );
+    this.setState({ layers: layers});
+
+    //Set router params thorugh App method
+    this.props.onChange({ layers: layers });
   }
 
   /**
