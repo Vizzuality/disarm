@@ -54,17 +54,16 @@ class App extends React.Component {
 
     this.state = {
       layersSpecCollection: layersSpecCollection,
-      mapOptions: mapOptions
+      mapOptions: mapOptions,
+      layers: []
     };
 
-    this._setListeners();
+    // this._setListeners();
   }
 
   _setListeners() {
-
     this.state.layersSpecCollection.on('change reset', () => {
       this.refs.Map.updateLayers();
-      // this.updateRouter();
     }).bind(this);
   }
 
@@ -78,9 +77,7 @@ class App extends React.Component {
     this._getRouterParams();
   }
 
-  updateRouter() {
-    console.log('updateRouter');
-    const params = this.refs.Map.state;
+  updateRouter(params) {
     router.update(params);
   }
 
@@ -92,9 +89,9 @@ class App extends React.Component {
 
     const updateTimelineDates = function(dates) {
       this.setState({ timelineDates: dates });
-      router.update({
-        timelineDate: moment.utc(dates.to).format('YYYY-MM-DD')
-      });
+      // router.update({
+      //   timelineDate: moment.utc(dates.to).format('YYYY-MM-DD')
+      // });
     };
 
     const updateMapDates = function (dates) {
@@ -136,7 +133,7 @@ class App extends React.Component {
 
   componentDidMount() {
     this._initTimeline();
-    this.updateRouter();
+    this._setListeners();
   }
 
   activeLayer(layer) {
@@ -144,16 +141,29 @@ class App extends React.Component {
   }
 
   _getRouterParams() {
-    const center = router.params.get('lat') ?
-      [router.params.get('lat'), router.params.get('lng')] : mapOptions.center;
-    const zoom = router.params.get('zoom') ? router.params.get('zoom') : mapOptions.zoom;
-    const layer = router.params.get('layer') || this.state.layersSpecCollection.getCurrentLayer().slug;
-
-    var newMapOptions = _.extend(mapOptions, {
-      center: center[0] ? center : mapOptions.center,
-      zoom: router.params.get('zoom') || mapOptions.zoom,
-      layer: layer
+    const newMapOptions = _.extend(mapOptions, {
+      center: router.params.get('lat') ? [router.params.get('lat'), router.params.get('lng')] : mapOptions.center,
+      zoom: router.params.get('zoom') ? router.params.get('zoom') : mapOptions.zoom
     });
+
+    const layers = router.params.get('layers') ? router.params.get('layers') : [];
+
+    console.log(layers);
+    //TODO: desactivate default layer.
+
+    const newState = _.extend({}, newMapOptions, layers);
+
+    //This is to active a new layer and set it to collection.
+    if (layers) {
+      _.each(layers, _.bind(function(layer) {
+        const currentLayer = _.where(this.state.layersSpecCollection.toJSON(), { slug: layer })[0];
+        currentLayer.active = true;
+        this.activeLayer(currentLayer);
+      }, this))
+    }
+
+    this.setState(newState);
+
   }
 
   render() {
@@ -166,13 +176,15 @@ class App extends React.Component {
     //   zoom: router.params.get('zoom')  || mapOptions.zoom,
     //   layer: layer
     // });
+    //
 
     return (
       <div>
         <div className="l-app">
           <Map ref="Map"
             mapOptions={ mapOptions }
-            onLoad={ this.updateRouter.bind(this) }
+            layers = { this.state.layers }
+            // onLoad={ this.updateRouter.bind(this) }
             onChange={ this.updateRouter.bind(this) }
           />
           <Dashboard
