@@ -21,8 +21,8 @@ class Dashboard extends React.Component {
         <SwitcherLayers
           setLayer={ this.props.setLayer.bind(this) }
         />
-        <Share />
         <Chart />
+        <Share />
       </div>
     );
   }
