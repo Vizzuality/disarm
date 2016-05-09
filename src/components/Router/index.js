@@ -43,7 +43,15 @@ class Router extends Backbone.Router {
    * @return {Object}
    */
   parseParams(queryString) {
-    return URI.parseQuery(`?${queryString}`);
+    let params = URI.parseQuery(`?${queryString}`);
+    if(params.hasOwnProperty('layers[]')) {
+      if(params['layers[]']) {
+        params.layers = Array.isArray(params['layers[]']) ? params['layers[]'] : [ params['layers[]'] ];
+      }
+      delete params['layers[]'];
+    }
+
+    return params;
   }
 
   /**
@@ -52,7 +60,8 @@ class Router extends Backbone.Router {
    * @return {String}
    */
   serializeParams(params) {
-    const queryString = URI.buildQuery(params);
+    let queryString = URI.buildQuery(params);
+    queryString = queryString.replace(/layers=/g, 'layers[]=');
     return `?${queryString}`;
   }
 

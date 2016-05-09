@@ -1,5 +1,6 @@
 'use strict';
 
+import _ from 'underscore';
 import Backbone from 'backbone';
 import LayerSpecModel from './LayerSpecModel';
 
@@ -19,10 +20,10 @@ class LayersSpecCollection extends Backbone.Collection {
     // Trying to not create a new instance every time
     if (!layer && layerSpec && !layerSpec.instancedLayer) {
       layerSpec.instanceLayer()
-      // .createLayer((l) => {
-      //   this.subscriber.addLayer(l);
-      //   this._layers[id] = l;
-      // });
+        .createLayer((l) => {
+          this.subscriber.addLayer(l);
+          this._layers[id] = l;
+        });
     } else if (!layer && layerSpec && layerSpec.instancedLayer) {
       this.subscriber.addLayer(layerSpec.instancedLayer.layer);
       this._layers[id] = layerSpec.instancedLayer.layer;
@@ -35,6 +36,7 @@ class LayersSpecCollection extends Backbone.Collection {
       this.subscriber.removeLayer(layer);
       this.clearLayer(id);
     }
+
   }
 
   getLayer(id) {
@@ -45,8 +47,25 @@ class LayersSpecCollection extends Backbone.Collection {
     delete this._layers[id];
   }
 
+  getCurrentLayer() {
+    return this.toJSON().find((layer, i) => {
+      return layer.active;
+    });
+  }
+
+  setCurrentLayer(layer) {
+    const layerClone = _.clone(this.toJSON());
+
+    _.each(layerClone, (layerSpec, i) => {
+      if (layerSpec.slug == layer.slug) {
+        layerSpec.active = layer.active;
+      }
+    });
+
+    this.reset(layerClone);
+  }
 }
 
 LayersSpecCollection.prototype.model = LayerSpecModel;
 
-export default LayersSpecCollection;
+export default new LayersSpecCollection();

@@ -27,6 +27,8 @@ const config = {
     filename: 'bundle.js'
   },
 
+  devtool: 'source-map',
+
   resolve: {
     extensions: ['', '.js', '.jsx']
   },

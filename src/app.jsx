@@ -1,16 +1,17 @@
 'use strict';
 
-import './styles.postcss';
+import './styles/layout.postcss';
 
 import _ from 'underscore';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import moment from 'moment';
 import Map from './components/Map';
-// import Dashboard from './components/Dashboard';
+import Dashboard from './components/Dashboard';
 import TimelineView from './components/Timeline';
 import Router from './components/Router';
 import layersData from './layerSpec.json';
+import LayersSpecCollection from './components/Map/LayersSpecCollection';
 
 const mapOptions = {
   center: [40, -3],
@@ -47,14 +48,36 @@ class App extends React.Component {
 
   constructor(props) {
     super(props);
+
+    const layersSpecCollection = LayersSpecCollection;
+    layersSpecCollection.set(layersData);
+
+    this.state = {
+      layersSpecCollection: layersSpecCollection,
+      mapOptions: mapOptions,
+      layers: []
+    };
+
+    // this._setListeners();
+  }
+
+  _setListeners() {
+    this.state.layersSpecCollection.on('change reset', () => {
+      this.refs.Map.updateLayers();
+    }).bind(this);
   }
 
   componentWillMount() {
     router.start();
+    this.setState(router.params.attributes);
+    router.on('route', () => {
+      this.setState(router.params.attributes);
+    });
+
+    this._getRouterParams();
   }
 
-  updateRouter() {
-    const params = this.refs.Map.state;
+  updateRouter(params) {
     router.update(params);
   }
 
@@ -66,9 +89,9 @@ class App extends React.Component {
 
     const updateTimelineDates = function(dates) {
       this.setState({ timelineDates: dates });
-      router.update({
-        timelineDate: moment.utc(dates.to).format('YYYY-MM-DD')
-      });
+      // router.update({
+      //   timelineDate: moment.utc(dates.to).format('YYYY-MM-DD')
+      // });
     };
 
     const updateMapDates = function (dates) {
@@ -110,23 +133,64 @@ class App extends React.Component {
 
   componentDidMount() {
     this._initTimeline();
+    this._setListeners();
+  }
+
+  activeLayer(layer) {
+    this.state.layersSpecCollection.setCurrentLayer(layer);
+  }
+
+  _getRouterParams() {
+    const newMapOptions = _.extend(mapOptions, {
+      center: router.params.get('lat') ? [router.params.get('lat'), router.params.get('lng')] : mapOptions.center,
+      zoom: router.params.get('zoom') ? router.params.get('zoom') : mapOptions.zoom
+    });
+
+    const layers = router.params.get('layers') ? router.params.get('layers') : [];
+
+    console.log(layers);
+    //TODO: desactivate default layer.
+
+    const newState = _.extend({}, newMapOptions, layers);
+
+    //This is to active a new layer and set it to collection.
+    if (layers) {
+      _.each(layers, _.bind(function(layer) {
+        const currentLayer = _.where(this.state.layersSpecCollection.toJSON(), { slug: layer })[0];
+        currentLayer.active = true;
+        this.activeLayer(currentLayer);
+      }, this))
+    }
+
+    this.setState(newState);
+
   }
 
   render() {
     // Getting params from router before render map
     // const center = [router.params.get('lat'), router.params.get('lng')];
-    // const options = _.extend({}, mapOptions, {
-    //   center: center,
-    //   zoom: router.params.get('zoom')
+    // const layer = [router.params.get('layer')]
+    //
+    // _.extend(mapOptions, {
+    //   center: center[0] ? center : mapOptions.center,
+    //   zoom: router.params.get('zoom')  || mapOptions.zoom,
+    //   layer: layer
     // });
+    //
+
     return (
       <div>
         <div className="l-app">
           <Map ref="Map"
             mapOptions={ mapOptions }
-            layersData={ layersData }
-            onLoad={ this.updateRouter.bind(this) }
-            onChange={ this.updateRouter.bind(this) } />
+            layers = { this.state.layers }
+            // onLoad={ this.updateRouter.bind(this) }
+            onChange={ this.updateRouter.bind(this) }
+          />
+          <Dashboard
+            layersSpecCollection = { this.state.layersSpecCollection }
+            setLayer = { this.activeLayer.bind(this) }
+          />
           <div id="timeline" className="l-timeline m-timeline" ref="Timeline">
             <svg className="btn js-button">
               <use xlinkHref="#icon-play" className="js-button-icon"></use>
@@ -137,7 +201,6 @@ class App extends React.Component {
       </div>
     );
   }
-
 }
 
 // Initializing app
