@@ -84,14 +84,17 @@ class App extends React.Component {
   _initTimeline() {
 
     const updateTimelineDates = function(dates) {
-      this.setState({ timelineDates: dates });
+      // console.log('timeline dates', dates)
+      // this.setState({ timelineDates: dates });
+
       // router.update({
       //   timelineDate: moment.utc(dates.to).format('YYYY-MM-DD')
       // });
     };
 
     const updateMapDates = function (dates) {
-      this.setState({ mapDates: dates });
+      // this.setState({ mapDates: dates });
+
       //MAP STATE CHANGE
       // console.log(dates);
       // this.mapView.state.set({ timelineDates: dates });
@@ -100,7 +103,7 @@ class App extends React.Component {
     const timelineParams = {
       el: document.getElementById('timeline'),
       interval: {
-        unit: d3.time.week.utc
+        unit: d3.time.month.utc
       },
       triggerTimelineDates: updateTimelineDates.bind(this),
       triggerMapDates: updateMapDates.bind(this),

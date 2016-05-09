@@ -18,7 +18,7 @@ const defaults = {
     left: 15
   },
   cursor: {
-    speed: 10 /* seconds per year */
+    speed: 100 /* seconds per year */
   },
   ticksAtExtremities: false
 };
@@ -232,9 +232,13 @@ class TimelineView extends Backbone.View {
      * We prefer this methods than taking into account the position of the
      * cursor (in pixels) as on small screen the approximation of one pixel
      * can represent a greater error/jump. */
-    this.dayPerFrame = 0.017 * 360 / this.options.cursor.speed;
 
-    this.animationFrame = requestAnimationFrame(this.renderAnimationFrame.bind(this));
+    //TODO - 30 / 31 days not always 30.
+    this.dayPerFrame = 30;
+
+    // this.animationFrame = requestAnimationFrame(this.renderAnimationFrame.bind(this));
+
+    this.animationFrame = setInterval(this.renderAnimationFrame.bind(this), 1000)
   }
 
   stop() {
@@ -243,8 +247,7 @@ class TimelineView extends Backbone.View {
     this.playing = false;
     this.buttonIcon.setAttribute('xlink:href', '#icon-play');
 
-    cancelAnimationFrame(this.animationFrame);
-    this.animationFrame = null;
+    clearInterval(this.animationFrame);
 
     /* We place the cursor at the end of the timeline if we reached the end */
     if(this.currentDataIndex === this.options.data.length - 1) {
@@ -281,13 +284,14 @@ class TimelineView extends Backbone.View {
       this.triggerCurrentData();
     }
 
+    //TRIGGER
     /* We trigger the new range shown with the cursor as the end */
     this.triggerCursorDate(this.cursorPosition);
 
     /* If we don't reach the end, we request another animation, otherwise we move
      * the cursor to its last position on the timeline */
     if(this.cursorPosition < this.options.domain[1]) {
-      this.animationFrame = requestAnimationFrame(this.renderAnimationFrame.bind(this));
+      // this.animationFrame = requestAnimationFrame(this.renderAnimationFrame.bind(this));
     } else {
       this.stop();
     }
@@ -304,7 +308,12 @@ class TimelineView extends Backbone.View {
    * not crossbrowser-standardized yet on d3 3.5.16:
    * https://github.com/mbostock/d3/issues/2790 */
   dayOffset(date, offset) {
-    return new Date(+date + offset * 24 * 60 * 60 * 1000);
+    const newDate = moment.utc(new Date(date)).add(1, 'months').toDate();
+    console.log(newDate);
+    // return new Date(+date + d3.time.month.offset);
+    // console.log(new Date(+date + offset * 24 * 60 * 60 * 1000));
+    // debugger
+    return moment.utc(new Date(date)).add(1, 'months').toDate();
   }
 
   onCursorStartDrag() {
@@ -364,34 +373,34 @@ class TimelineView extends Backbone.View {
     this.setCursorPosition(this.options.domain[1]);
   }
 
-  changeMode(mode, interval, dataRange, torqueLayer) {
-    this.options.interval = interval;
+  // changeMode(mode, interval, dataRange, torqueLayer) {
+  //   this.options.interval = interval;
 
-    if(this.cursorPosition < dataRange[0]) {
-      this.cursorPosition = dataRange[0];
-    } else if(this.cursorPosition > dataRange[1]) {
-      this.cursorPosition = dataRange[1];
-    }
+  //   if(this.cursorPosition < dataRange[0]) {
+  //     this.cursorPosition = dataRange[0];
+  //   } else if(this.cursorPosition > dataRange[1]) {
+  //     this.cursorPosition = dataRange[1];
+  //   }
 
-    /* We force some params for the speed of the timeline and frequency of the
-     * data */
-    if(mode === 'donations') {
-      if(torqueLayer) {
-        this.options.interval.unit = d3.time.week.utc;
-        this.options.cursor.speed = 10;
-      } else {
-        this.options.cursor.speed = 40;
-        this.options.interval.unit = d3.time.month.utc;
-      }
-    } else {
-      this.options.cursor.speed = 10;
-    }
+  //   /* We force some params for the speed of the timeline and frequency of the
+  //    * data */
+  //   if(mode === 'donations') {
+  //     if(torqueLayer) {
+  //       this.options.interval.unit = d3.time.week.utc;
+  //       this.options.cursor.speed = 10;
+  //     } else {
+  //       this.options.cursor.speed = 40;
+  //       this.options.interval.unit = d3.time.month.utc;
+  //     }
+  //   } else {
+  //     this.options.cursor.speed = 10;
+  //   }
 
-    this.render();
+  //   this.render();
 
-    this.currentDataIndex = this.getClosestDataIndex(this.cursorPosition);
-    this.triggerCurrentData()
-  }
+  //   this.currentDataIndex = this.getClosestDataIndex(this.cursorPosition);
+  //   this.triggerCurrentData()
+  // }
 
   setCursorPosition(date) {
     if(!moment.utc(this.cursorPosition).isSame(date)) {
