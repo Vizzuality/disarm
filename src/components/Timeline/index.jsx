@@ -11,12 +11,6 @@ import './styles.postcss';
 
 const defaults = {
   domain: [new Date(2012, 0, 1), new Date(2013, 0, 1)],
-  milestones: [
-    // { date: new Date(2012, 3, 15) },
-    // { date: new Date(2012, 4, 27) },
-    // { date: new Date(2013, 2, 21) },
-    // { date: new Date(2014, 8, 2)  }
-  ],
   svgPadding: {
     top: 0,
     right: 15,
@@ -170,17 +164,6 @@ class TimelineView extends Backbone.View {
     this.d3Axis.selectAll('.tick text')
       .attr('y', smallScreen ? -11 : -15)
       .style('text-anchor', 'middle');
-
-    /* We add the milestones */
-    this.d3Axis.selectAll('.milestone')
-      .data(this.options.milestones)
-      .enter()
-        .append('rect')
-        .attr('x', d => this.scale(d.date))
-        .attr('y', -4)
-        .attr('width', 8)
-        .attr('height', 8)
-        .attr('class', 'milestone');
 
     /* We add the cursor */
     const d3Slider = this.d3Axis
