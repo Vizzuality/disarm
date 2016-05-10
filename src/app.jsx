@@ -3,6 +3,7 @@
 import './styles/layout.postcss';
 
 import _ from 'underscore';
+import Backbone from 'backbone';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import moment from 'moment';
@@ -63,10 +64,9 @@ class App extends React.Component {
       tableInfoWindow: {
         isHidden: true
       },
-      layers: []
+      layers: [],
+      timelineDate: moment.utc('2012-11-01').toDate()
     };
-
-    // this._setListeners();
   }
 
   _setListeners() {
@@ -110,6 +110,7 @@ class App extends React.Component {
     };
 
     const timelineParams = {
+      cursorPosition: moment(this.state.timelineDate),
       el: document.getElementById('timeline'),
       interval: {
         unit: d3.time.month.utc
@@ -118,14 +119,6 @@ class App extends React.Component {
       triggerMapDates: updateMapDates.bind(this),
       ticksAtExtremities: false
     };
-
-    // /* We retrieve the position of the cursor from the URL if exists */
-    // if(this.router.params.toJSON().timelineDate) {
-    //   const date = moment.utc(this.router.params.toJSON().timelineDate, 'YYYY-MM-DD');
-    //   if(date.isValid()) {
-    //     timelineParams.cursorPosition = date.toDate();
-    //   }
-    // }
 
     this.timeline = new TimelineView(timelineParams);
 
@@ -160,11 +153,10 @@ class App extends React.Component {
       zoom: router.params.get('zoom') ? router.params.get('zoom') : mapOptions.zoom
     });
 
-    const layers = router.params.get('layers') ? router.params.get('layers') : [];
-
     //TODO: desactivate default layer.
-
-    const newState = _.extend({}, newMapOptions, layers);
+    const layers = router.params.get('layers') ? router.params.get('layers') : [];
+    const timelineDate = router.params.get('timelineDate') || this.state.timelineDate;
+    const newState = _.extend({}, newMapOptions, layers, timelineDate);
 
     //This is to active a new layer and set it to collection.
     if (layers) {
@@ -176,7 +168,6 @@ class App extends React.Component {
     }
 
     this.setState(newState);
-
   }
 
   render() {
