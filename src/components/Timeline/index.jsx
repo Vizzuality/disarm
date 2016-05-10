@@ -58,10 +58,6 @@ class TimelineView extends Backbone.View {
     $(window).resize(_.debounce(this.render, 50).bind(this));
   }
 
-  _updateTimeline() {
-    Backbone.Events.trigger('timeline:update', this.state);
-  }
-
   render() {
     const smallScreen = utils.checkDevice().mobile ||
       utils.checkDevice().tablet;

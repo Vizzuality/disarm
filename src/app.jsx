@@ -131,8 +131,8 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    this._setListeners();
     this._initTimeline();
+    this._setListeners();
   }
 
   activeLayer(layer) {
