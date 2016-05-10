@@ -82,20 +82,20 @@ class App extends React.Component {
   }
 
   _initTimeline() {
-    // const wholeRange = [
-    //   new Date(Math.min(this.state.ranges.donations[0], this.state.ranges.projects[0])),
-    //   new Date(Math.max(this.state.ranges.donations[1], this.state.ranges.projects[1]))
-    // ];
 
     const updateTimelineDates = function(dates) {
-      this.setState({ timelineDates: dates });
-      // router.update({
-      //   timelineDate: moment.utc(dates.to).format('YYYY-MM-DD')
-      // });
+      console.log('timeline dates', dates.to)
+      // this.setState({ timelineDates: dates });
+
+      router.update({
+        timelineDate: moment.utc(dates.to).format('YYYY-MM-DD')
+      });
+
     };
 
     const updateMapDates = function (dates) {
-      this.setState({ mapDates: dates });
+      // this.setState({ mapDates: dates });
+
       //MAP STATE CHANGE
       // console.log(dates);
       // this.mapView.state.set({ timelineDates: dates });
@@ -103,11 +103,9 @@ class App extends React.Component {
 
     const timelineParams = {
       el: document.getElementById('timeline'),
-      // domain: wholeRange,
       interval: {
-        unit: d3.time.week.utc
+        unit: d3.time.month.utc
       },
-      // filters: this.state.filters,
       triggerTimelineDates: updateTimelineDates.bind(this),
       triggerMapDates: updateMapDates.bind(this),
       ticksAtExtremities: false
@@ -148,7 +146,6 @@ class App extends React.Component {
 
     const layers = router.params.get('layers') ? router.params.get('layers') : [];
 
-    console.log(layers);
     //TODO: desactivate default layer.
 
     const newState = _.extend({}, newMapOptions, layers);
