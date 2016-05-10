@@ -22,7 +22,9 @@ class Dashboard extends React.Component {
           setLayer={ this.props.setLayer.bind(this) }
         />
         <Chart />
-        <Share />
+        <Share
+          openModal = { this.props.openModal }
+         />
       </div>
     );
   }

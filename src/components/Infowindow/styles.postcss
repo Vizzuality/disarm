@@ -1,0 +1,89 @@
+@import'../../styles/settings.postcss';
+
+.m-modal {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: rgba($color-4, .6);
+  opacity: 1;
+  transition: opacity .3s;
+  z-index: 21;
+
+  &.-hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  > .content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: scroll;
+    padding: rem(38) rem(20) rem(33) rem(20);
+    background-color: $color-5;
+    /*background: url("../../images/mappattern.png") top left/50% repeat;*/
+    /*background-attachment: local;*/
+    transition: opacity .4s, transform .3s;
+
+    @media screen and (min-width: $screen-s) {
+      top: 50%;
+      height: auto;
+      max-height: 80%;
+      transform: translate(-50%, -50%);
+      left: 50%;
+      max-width: 80%;
+      padding: rem(75) rem(50) rem(95) rem(50);
+    }
+
+    @media screen and (min-width: $screen-m) {
+      max-width: rem(700);
+    }
+
+    @media screen and (min-width: $screen-l) {
+      max-width: rem(925);
+      padding: rem(75) rem(40) rem(80) rem(40);
+    }
+
+    @media screen and (min-width: $screen-xl) {
+      left: 50%;
+      max-width: rem(960px);
+      transform: translate(-50%, -50%);
+      padding: rem(75) rem(50) rem(80) rem(50);
+    }
+
+    > .close-button {
+      position: absolute;
+      top: rem(20);
+      right: rem(20);
+      width: rem(18);
+      height: rem(18);
+      cursor: pointer;
+      > use { fill: $color-1; }
+
+      &:hover { fill: $color-9; }
+
+      @media screen and (min-width: $screen-s) {
+        top: rem(40);
+        right: rem(30);
+      }
+
+      @media screen and (min-width: $screen-xl) {
+        right: rem(40);
+      }
+    }
+  }
+
+  &.-hidden > .content {
+    opacity: 0;
+    transform: translateY(-100%);
+
+    @media screen and (min-width: $screen-s) {
+      transform: translate(-50%, -100%);
+    }
+  }
+}

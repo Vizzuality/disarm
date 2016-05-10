@@ -1,0 +1,51 @@
+@import './../../../styles/settings.postcss';
+@import './../../../styles/buttons.postcss';
+
+.c-download {
+  > h2 {
+    font-family: $font-family-1;
+    text-transform: uppercase;
+    color: $font-color-1;
+  }
+
+  > form {
+
+    .form-item {
+      margin: rem(10) 0;
+
+      > input {
+        margin: 0 rem(15) 0 0;
+      }
+    }
+
+    > .form-params {
+      display: flex;
+      height: rem(250);
+      overflow: hidden;
+    }
+
+    > .form-params .formats {
+      display: flex;
+      flex-direction: column;
+      flex-basis: 20%;
+      border-right: rem(1) solid $color-1;
+    }
+
+    > .form-params .months {
+      display: flex;
+      flex-direction: column;
+      flex-wrap: wrap;
+      flex-basis: 25%;
+      padding: 0 rem(30);
+    }
+
+    > .form-buttons {
+      display: flex;
+      justify-content: center;
+      margin-top: rem(15);
+      > .btn {
+        margin: 0 rem(10);
+      }
+    }
+  }
+}

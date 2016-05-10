@@ -19,6 +19,11 @@ class SwitcherItem extends React.Component {
     this.setState({active: !this.state.active});
   }
 
+  // only updates if active state changes
+  shouldComponentUpdate(nextProps, nextState) {
+    return this.state.active !== nextState.active;
+  }
+
   componentDidUpdate() {
     if (this.props.setLayer) {
       this.props.setLayer(this.state);
