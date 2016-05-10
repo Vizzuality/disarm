@@ -310,6 +310,7 @@ class TimelineView extends Backbone.View {
       setCursorPosition.getMonth() < 12 &&
         setCursorPosition.setMonth(setCursorPosition.getMonth()+1);
 
+    this.cursorPosition = setCursorPosition;
     this.moveCursor(setCursorPosition);
     this.triggerCursorDate(setCursorPosition);
 
@@ -329,7 +330,8 @@ class TimelineView extends Backbone.View {
     if(date < this.options.domain[0]) date = this.options.domain[0];
 
     /* We trigger the range currently selected in the timeline*/
-    this.triggerCursorDate(date);
+    if ( date.getDate() === 1 && this.cursorPosition.getDate() !== 1 ) this.triggerCursorDate(date);
+    
 
     const dataIndex = this.getClosestDataIndex(date);
     if(dataIndex !== this.currentDataIndex) {
@@ -384,6 +386,7 @@ TimelineView.prototype.triggerCursorDate = (function() {
     if(+oldEndDate === +endDate) return;
 
     const startDate  = moment.utc(this.scale.domain()[0]).add(1, 'days').toDate();
+
     this.options.triggerTimelineDates({
       from: startDate,
       to: endDate
