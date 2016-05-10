@@ -41,7 +41,7 @@ class Map extends React.Component {
         lat: center.lat
       };
     this.setState(nextState);
-    this.props.onChange(nextState)
+    this.props.onChange(nextState);
     });
 
     // Hack -> because on "load" doesn't work -.-
