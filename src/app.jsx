@@ -65,7 +65,7 @@ class App extends React.Component {
         isHidden: true
       },
       layers: [],
-      timelineDate: moment.utc('2012-11-01').toDate()
+      timelineDate: moment.utc('2012-12-01').toDate()
     };
   }
 
@@ -92,7 +92,7 @@ class App extends React.Component {
   _initTimeline() {
 
     const updateTimelineDates = function(dates) {
-      console.log('timeline dates', dates.to)
+      console.log('timeline dates', moment.utc(dates.to).format());
       // this.setState({ timelineDates: dates });
 
       router.update({
@@ -110,24 +110,18 @@ class App extends React.Component {
     };
 
     const timelineParams = {
-      cursorPosition: moment(this.state.timelineDate),
+      cursorPosition: moment.utc(this.state.timelineDate),
       el: document.getElementById('timeline'),
       interval: {
-        unit: d3.time.month.utc
+        unit: d3.time.month
       },
       triggerTimelineDates: updateTimelineDates.bind(this),
       triggerMapDates: updateMapDates.bind(this),
       ticksAtExtremities: false
     };
 
-    this.timeline = new TimelineView(timelineParams);
 
-    /* On init, we need to show only the range passed as argument */
-    // const interval = this.state.dataInterval[this.state.mode];
-    // if(this.state.filters.from || this.state.filters.to) {
-    //   const range = [ this.state.filters.from, this.state.filters.to ];
-    //   this.timeline.setRange(range, interval, true);
-    // }
+    this.timeline = new TimelineView(timelineParams);
   }
 
   componentDidMount() {

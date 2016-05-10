@@ -23,6 +23,13 @@ const defaults = {
   ticksAtExtremities: false
 };
 
+/* README FIRST! <3
+  if you need to use moment() at anytime, please
+  don't forget to add UTC timezone using moment.utc()
+
+  You will avoid lots of problems and headaches. \o/
+*/
+
 class TimelineView extends Backbone.View {
 
   events() {
@@ -42,16 +49,13 @@ class TimelineView extends Backbone.View {
     /* Position of the cursor
      * NOTE: doesn't contain a position in pixels but a date */
     if(this.options.cursorPosition) {
-      this.cursorPosition = this.options.cursorPosition
+      this.cursorPosition = this.options.cursorPosition;
     } else {
       this.cursorPosition = this.options.domain[this.options.domain.length - 1];
     }
 
     this.render();
     this.setListeners();
-
-    // this updates the timelineDate for first time with the first tick
-    this.triggerCursorDate(this.options.domain[0])
   }
 
   setListeners() {
@@ -114,7 +118,7 @@ class TimelineView extends Backbone.View {
         //   return;
         // }
 
-        return moment(d).month(i).format('MMM');
+        return moment.utc(d).month(i).format('MMM');
       })
       .outerTickSize(0);
 
@@ -209,8 +213,24 @@ class TimelineView extends Backbone.View {
       .attr('class', 'cursor')
       .call(this.brush.event);
 
-    this.options.data = this.options.interval.unit.range.apply(null, this.scale.domain().concat(this.options.interval.count))
+    this.options.data = this.options.interval.unit.utc.range.apply(null,
+      this.options.domain.concat(this.options.interval.count))
       .map(date => ({ date }));
+
+    /* set inner index to tell the timeline where should start to count once
+      everything is initialized */
+    this.currentDataIndex = this.getClosestDataIndex(this.cursorPosition);
+
+    /* if the index is equal as the last one of data array
+      means the cursor is in already in the last tick.
+      if so, we set the index to null to tell timeline the next step
+      is the first tick. */
+    if (this.currentDataIndex == this.options.data.length - 1) {
+      this.currentDataIndex = null;
+    }
+
+    // updates router with setted date
+    this.triggerCursorDate(this.cursorPosition);
   }
 
   togglePlay() {
@@ -287,8 +307,6 @@ class TimelineView extends Backbone.View {
     }
   }
 
-
-
   moveCursor(date) {
     this.brush.extent([date, date]);
     this.d3Cursor.attr('transform', () => `translate(${this.scale(date)})`);
@@ -319,7 +337,7 @@ class TimelineView extends Backbone.View {
     this.triggerCursorDate(resetCursorPosition);
 
     //TODO - when finish drag, send the cursor to neraest point
-    this.cursorShadow.attr('filter', '')
+    this.cursorShadow.attr('filter', '');
     document.body.classList.remove('-grabbing');
   }
 
@@ -327,7 +345,7 @@ class TimelineView extends Backbone.View {
     //TODO - send data only when crossing month point.
     if(!d3.event.sourceEvent) return;
 
-    this.cursorShadow.attr('filter', 'url(#cursorShadow)')
+    this.cursorShadow.attr('filter', 'url(#cursorShadow)');
 
     let date = this.scale.invert(d3.mouse(this.axis)[0]);
     if(date > this.options.domain[1]) date = this.options.domain[1];
@@ -335,7 +353,7 @@ class TimelineView extends Backbone.View {
 
     /* We trigger the range currently selected in the timeline*/
     if ( date.getDate() === 1 && this.cursorPosition.date() !== 1 ) this.triggerCursorDate(date);
-    
+
 
     const dataIndex = this.getClosestDataIndex(date);
     if(dataIndex !== this.currentDataIndex) {
@@ -408,7 +426,7 @@ TimelineView.prototype.triggerCurrentData = (function() {
   }, 100);
 
   return function() {
-    const startDate  = moment.utc(this.scale.domain()[0]).add(1, 'days').toDate();
+    const startDate  = moment.utc(this.scale.domain()[0]).toDate();
     let dataDate;
     if(this.currentDataIndex < 0) {
       dataDate = this.options.domain[0];
