@@ -18,7 +18,7 @@ const defaults = {
     left: 15
   },
   cursor: {
-    speed: 100 /* seconds per year */
+    speed: 100 /* seconds per month */
   },
   ticksAtExtremities: false
 };
@@ -79,7 +79,10 @@ class TimelineView extends Backbone.View {
     /* Because d3 doesn't display the first tick, we subtract 1 day to it.
      * NOTE: concat and clone are used to not modify the original array */
     const domain = this.options.domain.concat([]);
-    domain[0] = moment.utc(domain[0]).clone().subtract(1, 'days').toDate();
+    // domain[0] = moment.utc(domain[0]).clone().subtract(1, 'days').toDate();
+
+    // to display last tick (december), we add 1 day to it.
+    domain[1] = moment.utc(domain[1]).clone().add(1, 'days').toDate();
 
     this.scale = d3.time.scale.utc()
       .domain(domain)
@@ -291,7 +294,6 @@ class TimelineView extends Backbone.View {
   dayOffset(date) {
     //TODO - check if we need UTC time here or not.
     return moment.utc(new Date(date)).add(1, 'months').toDate();
-    // return moment(new Date(date)).add(1, 'months').toDate();
   }
 
   onCursorStartDrag() {
