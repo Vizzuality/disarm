@@ -2,7 +2,7 @@
 
 const path = require('path');
 const http = require('http');
-const debug = require('debug')('care:server');
+const debug = require('debug')('disarm:server');
 const express = require('express');
 const webpack = require('webpack');
 const webpackMiddleware = require('webpack-dev-middleware');
@@ -36,10 +36,6 @@ if (isDevelop) {
     res.end();
   });
 
-  app.get('/anniversary', function response(req, res) {
-    res.write(middleware.fileSystem.readFileSync(path.join(__dirname, 'dist/anniversary.html')));
-    res.end();
-  });
 } else {
   app.use(express.static(__dirname + '/dist'));
 
@@ -47,14 +43,10 @@ if (isDevelop) {
   app.get('/', function response(req, res) {
     res.sendFile(path.join(__dirname, 'dist/index.html'));
   });
-
-  app.get('/anniversary', function response(req, res) {
-    res.sendFile(path.join(__dirname, 'dist/anniversary.html'));
-  });
 }
 
 // Get port from environment and store in Express.
-const port = normalizePort(process.env.PORT || '3000');
+const port = normalizePort(process.env.PORT || '8080');
 app.set('port', port);
 
 // Create HTTP server.
