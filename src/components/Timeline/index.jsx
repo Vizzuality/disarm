@@ -306,17 +306,17 @@ class TimelineView extends Backbone.View {
   }
 
   onCursorEndDrag() {
-    let setCursorPosition = this.cursorPosition;
-    const day = setCursorPosition.getDate();
-    setCursorPosition.setDate(1);
+    let resetCursorPosition = this.cursorPosition;
+    const day = resetCursorPosition.date();
+    resetCursorPosition.date(1);
 
     day > 15 &&
-      setCursorPosition.getMonth() < 12 &&
-        setCursorPosition.setMonth(setCursorPosition.getMonth()+1);
+      resetCursorPosition.month() < 12 &&
+        resetCursorPosition.month(resetCursorPosition.month()+1);
 
-    this.cursorPosition = setCursorPosition;
-    this.moveCursor(setCursorPosition);
-    this.triggerCursorDate(setCursorPosition);
+    this.cursorPosition = resetCursorPosition;
+    this.moveCursor(resetCursorPosition);
+    this.triggerCursorDate(resetCursorPosition);
 
     //TODO - when finish drag, send the cursor to neraest point
     this.cursorShadow.attr('filter', '')
@@ -334,7 +334,7 @@ class TimelineView extends Backbone.View {
     if(date < this.options.domain[0]) date = this.options.domain[0];
 
     /* We trigger the range currently selected in the timeline*/
-    if ( date.getDate() === 1 && this.cursorPosition.getDate() !== 1 ) this.triggerCursorDate(date);
+    if ( date.getDate() === 1 && this.cursorPosition.date() !== 1 ) this.triggerCursorDate(date);
     
 
     const dataIndex = this.getClosestDataIndex(date);
@@ -343,8 +343,7 @@ class TimelineView extends Backbone.View {
       /* We trigger the range of the currently available data */
       this.triggerCurrentData();
     }
-
-    this.cursorPosition = date;
+    this.cursorPosition = moment.utc(date);
     this.moveCursor(date);
   }
 
