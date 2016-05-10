@@ -65,7 +65,7 @@ class App extends React.Component {
         isHidden: true
       },
       layers: [],
-      timelineDate: new Date('2012-01-01')
+      timelineDate: moment.utc('2012-01-01').toDate()
     };
   }
 
@@ -73,10 +73,6 @@ class App extends React.Component {
     this.state.layersSpecCollection.on('change reset', () => {
       this.refs.Map.updateLayers();
     }).bind(this);
-
-    Backbone.Events.on('timeline:update', function(params) {
-      this.updateRouter(params);
-    } ,this)
   }
 
   componentWillMount() {
@@ -114,6 +110,7 @@ class App extends React.Component {
     };
 
     const timelineParams = {
+      cursorPosition: moment(this.state.timelineDate),
       el: document.getElementById('timeline'),
       interval: {
         unit: d3.time.month.utc
@@ -122,16 +119,6 @@ class App extends React.Component {
       triggerMapDates: updateMapDates.bind(this),
       ticksAtExtremities: false
     };
-
-    // /* We retrieve the position of the cursor from the URL if exists */
-    if(router.params.toJSON().timelineDate) {
-      const date = moment.utc(router.params.toJSON().timelineDate, 'YYYY-MM-DD');
-      if(date.isValid()) {
-        timelineParams.cursorPosition = date.toDate();
-      }
-    } else {
-      timelineParams.cursorPosition = this.state.timelineDate;
-    }
 
     this.timeline = new TimelineView(timelineParams);
 

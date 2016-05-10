@@ -50,15 +50,8 @@ class TimelineView extends Backbone.View {
     this.render();
     this.setListeners();
 
-    const timelineDate = moment.utc(this.options.cursorPosition).format('YYYY-MM-DD');
-
-    // in order to emulate react states, we create our own state
-    this.state = {
-      timelineDate: timelineDate
-    };
-
-    this._updateTimeline();
-
+    // this updates the timelineDate for first time with the first tick
+    this.triggerCursorDate(this.options.domain[0])
   }
 
   setListeners() {
@@ -297,6 +290,8 @@ class TimelineView extends Backbone.View {
       this.stop();
     }
   }
+
+
 
   moveCursor(date) {
     this.brush.extent([date, date]);
