@@ -50,10 +50,23 @@ class TimelineView extends Backbone.View {
     this.render();
     this.setListeners();
 
+    const timelineDate = moment.utc(this.options.cursorPosition).format('YYYY-MM-DD');
+
+    // in order to emulate react states, we create our own state
+    this.state = {
+      timelineDate: timelineDate
+    };
+
+    this._updateTimeline();
+
   }
 
   setListeners() {
     $(window).resize(_.debounce(this.render, 50).bind(this));
+  }
+
+  _updateTimeline() {
+    Backbone.Events.trigger('timeline:update', this.state);
   }
 
   render() {
