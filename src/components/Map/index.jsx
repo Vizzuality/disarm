@@ -1,6 +1,6 @@
 'use strict';
 
-import './style.css';
+import './styles.postcss';
 import _ from 'underscore';
 import React from 'react';
 import Legend from './Legend';

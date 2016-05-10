@@ -15,7 +15,9 @@ class Header extends React.Component {
       <div className="l-header c-header">
         <div className="wrap">
           <div className="c-logo">
-            <h1>Disarm core</h1><span className="beta">beta</span>
+            <a href="/">
+              <h1>Disarm core</h1><span className="beta">beta</span>
+            </a>
           </div>
           <nav className="c-navigation">
             <ul>
