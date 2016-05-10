@@ -10,13 +10,7 @@ import utils from '../../scripts/helpers/utils';
 import './styles.postcss';
 
 const defaults = {
-  domain: [new Date(2012, 0, 1), new Date(2013, 0, 1)],
-  milestones: [
-    // { date: new Date(2012, 3, 15) },
-    // { date: new Date(2012, 4, 27) },
-    // { date: new Date(2013, 2, 21) },
-    // { date: new Date(2014, 8, 2)  }
-  ],
+  domain: [new Date(Date.UTC(2012, 0, 1)), new Date(Date.UTC(2012, 11, 1))],
   svgPadding: {
     top: 0,
     right: 15,
@@ -24,7 +18,7 @@ const defaults = {
     left: 15
   },
   cursor: {
-    speed: 10 /* seconds per year */
+    speed: 100 /* seconds per month */
   },
   ticksAtExtremities: false
 };
@@ -85,7 +79,10 @@ class TimelineView extends Backbone.View {
     /* Because d3 doesn't display the first tick, we subtract 1 day to it.
      * NOTE: concat and clone are used to not modify the original array */
     const domain = this.options.domain.concat([]);
-    domain[0] = moment.utc(domain[0]).clone().subtract(1, 'days').toDate();
+    // domain[0] = moment.utc(domain[0]).clone().subtract(1, 'days').toDate();
+
+    // to display last tick (december), we add 1 day to it.
+    domain[1] = moment.utc(domain[1]).clone().add(1, 'days').toDate();
 
     this.scale = d3.time.scale.utc()
       .domain(domain)
@@ -171,17 +168,6 @@ class TimelineView extends Backbone.View {
       .attr('y', smallScreen ? -11 : -15)
       .style('text-anchor', 'middle');
 
-    /* We add the milestones */
-    this.d3Axis.selectAll('.milestone')
-      .data(this.options.milestones)
-      .enter()
-        .append('rect')
-        .attr('x', d => this.scale(d.date))
-        .attr('y', -4)
-        .attr('width', 8)
-        .attr('height', 8)
-        .attr('class', 'milestone');
-
     /* We add the cursor */
     const d3Slider = this.d3Axis
       .append('g')
@@ -244,14 +230,7 @@ class TimelineView extends Backbone.View {
       this.moveCursor(this.options.domain[0]);
     }
 
-    /* We compute the number of day we need to jump for each animation frame,
-     * assuming that the animation loop is called at 60 FPS
-     * We prefer this methods than taking into account the position of the
-     * cursor (in pixels) as on small screen the approximation of one pixel
-     * can represent a greater error/jump. */
-    this.dayPerFrame = 0.017 * 360 / this.options.cursor.speed;
-
-    this.animationFrame = requestAnimationFrame(this.renderAnimationFrame.bind(this));
+    this.animationFrame = setInterval(this.renderAnimationFrame.bind(this), 1000)
   }
 
   stop() {
@@ -260,8 +239,7 @@ class TimelineView extends Backbone.View {
     this.playing = false;
     this.buttonIcon.setAttribute('xlink:href', '#icon-play');
 
-    cancelAnimationFrame(this.animationFrame);
-    this.animationFrame = null;
+    clearInterval(this.animationFrame);
 
     /* We place the cursor at the end of the timeline if we reached the end */
     if(this.currentDataIndex === this.options.data.length - 1) {
@@ -280,7 +258,7 @@ class TimelineView extends Backbone.View {
       this.triggerCurrentData();
       this.moveCursor(this.cursorPosition);
     } else {
-      this.cursorPosition = this.dayOffset(this.cursorPosition, this.dayPerFrame);
+      this.cursorPosition = this.dayOffset(this.cursorPosition);
 
       /* We don't want to overpass the domain */
       if(this.cursorPosition > this.options.domain[1]) {
@@ -301,11 +279,8 @@ class TimelineView extends Backbone.View {
     /* We trigger the new range shown with the cursor as the end */
     this.triggerCursorDate(this.cursorPosition);
 
-    /* If we don't reach the end, we request another animation, otherwise we move
-     * the cursor to its last position on the timeline */
-    if(this.cursorPosition < this.options.domain[1]) {
-      this.animationFrame = requestAnimationFrame(this.renderAnimationFrame.bind(this));
-    } else {
+    /* Stops animation when reach end of the domain */
+    if(!(this.cursorPosition < this.options.domain[1])) {
       this.stop();
     }
   }
@@ -316,12 +291,9 @@ class TimelineView extends Backbone.View {
     this.d3CursorLine.attr('x2', this.scale(date));
   }
 
-  /* Compute and return date with the passed offset
-   * NOTE: d3.time.day.offset can't be used because the use of float numbers are
-   * not crossbrowser-standardized yet on d3 3.5.16:
-   * https://github.com/mbostock/d3/issues/2790 */
-  dayOffset(date, offset) {
-    return new Date(+date + offset * 24 * 60 * 60 * 1000);
+  dayOffset(date) {
+    //TODO - check if we need UTC time here or not.
+    return moment.utc(new Date(date)).add(1, 'months').toDate();
   }
 
   onCursorStartDrag() {
@@ -330,15 +302,16 @@ class TimelineView extends Backbone.View {
   }
 
   onCursorEndDrag() {
+    //TODO - when finish drag, send the cursor to neraest point
     this.cursorShadow.attr('filter', '')
     document.body.classList.remove('-grabbing');
   }
 
   onCursorDrag() {
+    //TODO - send data only when crossing month point.
     if(!d3.event.sourceEvent) return;
 
     this.cursorShadow.attr('filter', 'url(#cursorShadow)')
-
 
     let date = this.scale.invert(d3.mouse(this.axis)[0]);
     if(date > this.options.domain[1]) date = this.options.domain[1];
@@ -379,35 +352,6 @@ class TimelineView extends Backbone.View {
     this.options.ticksAtExtremities = !!extremityTicks;
     if(interval) this.options.interval = interval;
     this.setCursorPosition(this.options.domain[1]);
-  }
-
-  changeMode(mode, interval, dataRange, torqueLayer) {
-    this.options.interval = interval;
-
-    if(this.cursorPosition < dataRange[0]) {
-      this.cursorPosition = dataRange[0];
-    } else if(this.cursorPosition > dataRange[1]) {
-      this.cursorPosition = dataRange[1];
-    }
-
-    /* We force some params for the speed of the timeline and frequency of the
-     * data */
-    if(mode === 'donations') {
-      if(torqueLayer) {
-        this.options.interval.unit = d3.time.week.utc;
-        this.options.cursor.speed = 10;
-      } else {
-        this.options.cursor.speed = 40;
-        this.options.interval.unit = d3.time.month.utc;
-      }
-    } else {
-      this.options.cursor.speed = 10;
-    }
-
-    this.render();
-
-    this.currentDataIndex = this.getClosestDataIndex(this.cursorPosition);
-    this.triggerCurrentData()
   }
 
   setCursorPosition(date) {
@@ -452,7 +396,7 @@ TimelineView.prototype.triggerCurrentData = (function() {
     if(this.currentDataIndex < 0) {
       dataDate = this.options.domain[0];
     } else {
-      dataDate   = this.options.data[this.currentDataIndex].date;
+      dataDate  = this.options.data[this.currentDataIndex].date;
     }
 
     /* We trigger the range show with the last date with data */
