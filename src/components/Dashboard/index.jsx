@@ -5,6 +5,7 @@ import './styles.postcss';
 import _ from 'underscore';
 import React from 'react';
 import SwitcherLayers from './SwitcherLayers';
+import Chart from './../Chart';
 import Share from './Share';
 
 class Dashboard extends React.Component {
@@ -20,6 +21,7 @@ class Dashboard extends React.Component {
         <SwitcherLayers
           setLayer={ this.props.setLayer.bind(this) }
         />
+        <Chart />
         <Share
           openModal = { this.props.openModal }
          />
