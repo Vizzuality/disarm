@@ -87,10 +87,10 @@ class Map extends React.Component {
     });
 
     const layers = (this.layerSpecCollection.models).filter( (model) => model.attributes.active ).map( model => model.attributes.slug );
-    this.setState({ layers: layers});
+    this.state['layers'] = layers;
 
     //Set router params thorugh App method
-    this.props.onChange({ layers: layers });
+    this.props.onChange(this.state);
   }
 
   /**
