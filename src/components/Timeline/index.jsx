@@ -302,6 +302,16 @@ class TimelineView extends Backbone.View {
   }
 
   onCursorEndDrag() {
+    const setCursorPosition = this.cursorPosition;
+    const day = setCursorPosition.getDate();
+    setCursorPosition.setDate(1);
+
+    day > 15 &&
+      setCursorPosition.getMonth() < 12 &&
+        setCursorPosition.setMonth(setCursorPosition.getMonth()+1);
+
+    this.moveCursor(setCursorPosition);
+
     //TODO - when finish drag, send the cursor to neraest point
     this.cursorShadow.attr('filter', '')
     document.body.classList.remove('-grabbing');
