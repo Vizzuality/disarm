@@ -65,7 +65,7 @@ class App extends React.Component {
         isHidden: true
       },
       layers: [],
-      timelineDate: moment.utc('2012-01-01').toDate()
+      timelineDate: moment.utc('2012-11-01').toDate()
     };
   }
 
