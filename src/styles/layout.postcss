@@ -1,0 +1,150 @@
+@import './settings.postcss';
+
+$header-height: 90;
+$header-height-mb: 70;
+$timeline-height: 75;
+$timeline-height-mb: 70;
+$credits-height-mb: 25;
+$l-margin-vt: 50;
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.wrap {
+  position: relative;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 $wrap-padding-mobile;
+
+  @media screen and (min-width: $screen-s) {
+    padding: 0 $wrap-padding-tablet;
+  }
+
+  @media screen and (min-width: $screen-m) {
+    padding: 0 $wrap-padding-desktop;
+  }
+
+  @media screen and (min-width: $screen-xl) {
+    padding: 0 $wrap-padding-desktop-xl;
+  }
+}
+
+.l-app {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+
+  .logo {
+    pointer-events: auto;
+  }
+}
+
+
+.l-map {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+
+  cursor: pointer;
+}
+
+
+.l-share {
+  position: absolute;
+  top: rem(70);
+  right: $wrap-padding-mobile;
+  width: rem(35);
+  height: rem(35);
+  background-color: $color-1;
+  padding: rem(7);
+
+  @media screen and (min-width: $screen-m) {
+    right: $wrap-padding-desktop;
+    top: rem(203);
+  }
+
+  @media screen and (min-width: $screen-xl) {
+    right: $wrap-padding-desktop-xl;
+  }
+
+  .icon {
+    width: 100%;
+    height: 100%;
+    fill: $white;
+  }
+}
+
+
+.l-header {
+  display: flex;
+  flex: 1 1 100%;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: rem($header-height-mb);
+  z-index: 1;
+  pointer-events: none;
+
+  @media screen and (min-width: $screen-m) {
+    height: rem($header-height);
+  }
+
+  > .wrap {
+    display: flex;
+    flex: 1 1 100%;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+#app {
+  .l-header {
+    position: absolute;
+  }
+}
+
+.l-dashboard {
+  z-index: 2;
+  position: absolute;
+  top: rem(100);
+  left: rem(75);
+
+  padding: rem(15);
+
+  background: $white;
+}
+
+.l-switcher {
+  padding: 0;
+  margin: 0;  
+}
+
+
+.l-timeline {
+  position: absolute;
+  bottom: rem($credits-height-mb);
+  left: 0;
+  right: 0;
+  height: rem($timeline-height-mb);
+  border-top: 1px solid $beige-7;
+
+  @media screen and (min-width: $screen-m) {
+    border-top: 0;
+    height: rem($timeline-height);
+    right: 260px;
+    left: $wrap-padding-desktop;
+    bottom: rem($l-margin-vt);
+  }
+
+  @media screen and (min-width: $screen-xl) {
+    left: $wrap-padding-desktop-xl;
+  }
+}

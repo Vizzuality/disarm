@@ -1,0 +1,96 @@
+@import '../../styles/settings.postcss';
+
+.l-timeline {
+  z-index: 2;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 100px;
+  height: 45px;
+}
+
+.m-timeline {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 $wrap-padding-mobile;
+  /*background: url("../../images/mappattern.png") top left/50% repeat;*/
+
+  @media screen and (min-width: $screen-m) {
+    padding: 0;
+    background: none;
+  }
+
+  > .btn {
+    flex-basis: rem(16);
+    width: rem(16); /* For IE */
+    height: rem(21);
+    transform: translateY(rem(4));
+    padding: 0;
+    cursor: pointer;
+    > use { fill: $color-1; }
+    &:hover > use { fill: $color-9; }
+  }
+
+  > .svg-container {
+    width: calc(100% - rem(45));
+    height: 100%;
+
+    .axis {
+      > .tick  {
+        > .report { fill: $color-4; }
+        > text {
+          font-size: rem(10);
+          letter-spacing: .4px;
+          line-height: 1.1;
+          font-family: $font-family-2;
+          color: $font-color-2;
+
+          @media screen and (min-width: $screen-s) {
+            font-size: rem(12);
+            letter-spacing: rem(.5);
+          }
+
+          @media screen and (min-width: $screen-m) {
+            font-size: rem(13);
+          }
+        }
+      }
+
+      > .milestone {
+        display: none;
+        fill: $color-5;
+
+        @media screen and (min-width: $screen-m) {
+          display: block;
+        }
+      }
+
+      > .domain {
+        stroke-width: 1px; /* rem value not supported for this property */
+        stroke: rgba($color-4, .3);
+        fill: none;
+      }
+
+      .cursor {
+        fill: $color-4;
+        cursor: -webkit-grab; /* Autoprefixer doesn't work for that */
+        cursor:    -moz-grab;
+        cursor:         grab;
+      }
+
+      .cursor-shadow {
+        fill: $color-10;
+      }
+
+      .cursor-line {
+        stroke: $color-4;
+        stroke-width: 1px;  /* rem value not supported for this property */
+
+        @media screen and (min-width: $screen-m) {
+          stroke-width: 3px;
+        }
+      }
+    }
+  }
+}
