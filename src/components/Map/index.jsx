@@ -1,6 +1,5 @@
 'use strict';
 
-import './styles.postcss';
 import _ from 'underscore';
 import React from 'react';
 import Legend from './Legend';
@@ -143,7 +142,7 @@ class Map extends React.Component {
       legend = (<Legend layersSpec={ this.layerSpecCollection } />);
     }
     return (
-      <div ref="MapElement" className="c-map">
+      <div ref="MapElement" className="l-map">
         { legend }
       </div>
     );

@@ -44,6 +44,19 @@ body {
   }
 }
 
+.l-map {
+  z-index: 1;
+  position: absolute;
+  top: rem($header-height-mb);
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  @media screen and (min-width: $screen-m) {
+    top: rem($header-height);
+  }
+}
+
 .l-share {
   position: absolute;
   top: rem(70);
