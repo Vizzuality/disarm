@@ -6,7 +6,6 @@ const debug = require('debug')('disarm:server');
 const express = require('express');
 const webpack = require('webpack');
 const webpackMiddleware = require('webpack-dev-middleware');
-const webpackHotMiddleware = require('webpack-hot-middleware');
 const config = require('./webpack.config.js');
 const isDevelop = process.env.NODE_ENV !== 'production';
 
@@ -28,7 +27,6 @@ if (isDevelop) {
     }
   });
   app.use(middleware);
-  app.use(webpackHotMiddleware(compiler));
 
   // Routes
   app.get('/', function response(req, res) {
@@ -46,7 +44,7 @@ if (isDevelop) {
 }
 
 // Get port from environment and store in Express.
-const port = normalizePort(process.env.PORT || '8080');
+const port = normalizePort(process.env.PORT || '5000');
 app.set('port', port);
 
 // Create HTTP server.
