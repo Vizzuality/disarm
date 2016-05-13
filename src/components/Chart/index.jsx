@@ -22,12 +22,12 @@ class Chart extends React.Component {
     this._setChart();
   }
 
-  componentWillUpdate() {
+  componentDidUpdate() {
     this._setChart();
   }
 
   _getcurrentData() {
-    this.month = moment(this.props.timelineDate).month();
+    this.month = moment.utc(this.props.timelineDate).month();
     return this.state.data[0][this.month];
   }
 
@@ -98,7 +98,7 @@ class Chart extends React.Component {
     return (
       <div ref="ChartElement" className="c-chart">
         <div id="chart" className="chart"></div>
-        <div className="chart-legend"><div className="legend-img"></div>{`Malaria cases (current month ${this.month})`}</div>
+        <div className="chart-legend"><div className="legend-img"></div>Malaria cases (current month)</div>
       </div>
     );
   }

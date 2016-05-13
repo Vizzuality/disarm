@@ -92,10 +92,9 @@ class App extends React.Component {
   }
 
   _initTimeline() {
-
     const updateTimelineDates = function(dates) {
-      console.log('timeline dates', moment.utc(dates.to).format());
-      const date = moment.utc(dates.to).format('YYYY-MM-DD')
+      console.log('timeline dates recieve', moment.utc(dates.to).format());
+      const date = moment.utc(dates.to).format();
       this.setState({ timelineDate: date });
       router.update({ timelineDate: date });
     };
