@@ -1,0 +1,57 @@
+@import'../../styles/settings.postcss';
+
+.c-header {
+  background: $color-5;
+}
+.c-logo {
+  display: flex;
+  align-items: center;
+
+  a {
+    display: flex;;
+    align-items: center;
+
+    text-decoration: none;
+  }
+
+  h1 {
+    display: inline-block;
+
+    color: $font-color-1;
+    font-size: rem(32);
+    font-weight: 500;
+    text-transform: uppercase;
+  }
+
+  .beta {
+    display: inline-block;
+    margin-left: rem(10);
+    padding: rem(4) rem(8);
+
+    color: $font-color-3;
+    font-weight: 300;
+    text-transform: uppercase;
+
+    background: $color-1;
+  }
+}
+
+.c-navigation {
+  > ul {
+    display: flex;
+    margin: 0;
+    padding: 0;
+  }
+
+  ul > li {
+    list-style: none;
+  }
+
+  a {
+    margin: 0 rem(10);
+
+    text-transform: uppercase;
+    text-decoration: none;
+    color: $font-color-1;
+  }
+}
