@@ -7,6 +7,7 @@ import Backbone from 'backbone';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import moment from 'moment';
+import Header from './components/Header';
 import Map from './components/Map';
 import Dashboard from './components/Dashboard';
 import DownloadInfoWindow from './components/Infowindow/Download';
@@ -98,7 +99,6 @@ class App extends React.Component {
       router.update({
         timelineDate: moment.utc(dates.to).format('YYYY-MM-DD')
       });
-
     };
 
     const updateMapDates = function (dates) {
@@ -184,7 +184,9 @@ class App extends React.Component {
 
     return (
       <div>
+
         <div className="l-app">
+          <Header />
           <TableInfoWindow
             isHidden= {this.state.tableInfoWindow.isHidden}
             onClose={this.handleInfowindow.bind(this, 'tableInfoWindow')}

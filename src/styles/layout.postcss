@@ -1,7 +1,6 @@
 @import './settings.postcss';
 
-$header-height: 90;
-$header-height-mb: 70;
+
 $timeline-height: 75;
 $timeline-height-mb: 70;
 $credits-height-mb: 25;
@@ -10,6 +9,8 @@ $l-margin-vt: 50;
 body {
   margin: 0;
   padding: 0;
+
+  font-family: $font-family-1;
 }
 
 .wrap {
@@ -43,17 +44,18 @@ body {
   }
 }
 
-
 .l-map {
+  z-index: 1;
   position: absolute;
-  top: 0;
+  top: rem($header-height-mb);
   left: 0;
-  right: 0;
+  width: 100%;
   height: 100%;
 
-  cursor: pointer;
+  @media screen and (min-width: $screen-m) {
+    top: rem($header-height);
+  }
 }
-
 
 .l-share {
   position: absolute;
@@ -90,8 +92,7 @@ body {
   left: 0;
   right: 0;
   height: rem($header-height-mb);
-  z-index: 1;
-  pointer-events: none;
+  z-index: 2;
 
   @media screen and (min-width: $screen-m) {
     height: rem($header-height);
@@ -114,7 +115,7 @@ body {
 .l-dashboard {
   z-index: 2;
   position: absolute;
-  top: rem(100);
+  top: rem(200);
   left: rem(75);
 
   padding: rem(15);
@@ -124,7 +125,7 @@ body {
 
 .l-switcher {
   padding: 0;
-  margin: 0;  
+  margin: 0;
 }
 
 
