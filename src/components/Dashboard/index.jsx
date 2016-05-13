@@ -21,7 +21,9 @@ class Dashboard extends React.Component {
         <SwitcherLayers
           setLayer={ this.props.setLayer.bind(this) }
         />
-        <Chart />
+        <Chart
+          timelineDate = { this.props.timelineDate }
+        />
         <Share
           openModal = { this.props.openModal }
          />

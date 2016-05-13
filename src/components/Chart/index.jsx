@@ -5,65 +5,40 @@ import React from 'react';
 import d3 from 'd3';
 import $ from 'jquery';
 import _ from 'underscore';
-import MonthDataCollection from './../../scripts/collection/MonthDataCollection';
+import moment from 'moment';
+import monthDataCollection from './../../scripts/collection/MonthDataCollection';
 
 class Chart extends React.Component {
 
   constructor(props) {
     super(props);
-    // this.state = {
-    //   data: [
-    //       {
-    //         "day": 1,
-    //         "count": 0
-    //       },
-    //       {
-    //         "day": 3,
-    //         "count": 20
-    //       },
-    //       {
-    //         "day": 8,
-    //         "count": 55
-    //       },
-    //       {
-    //         "day": 14,
-    //         "count": 33
-    //       },
-    //       {
-    //         "day": 19,
-    //         "count": 72
-    //       },
-    //       {
-    //         "day": 24,
-    //         "count": 10
-    //       },
-    //       {
-    //         "day": 29,
-    //         "count": 99
-    //       }
-    //     ]
-    // };
-  }
 
-  componentWillMount() {
+    this.state = {
+      data: monthDataCollection.toJSON()
+    }
   }
 
   componentDidMount() {
-    this.monthDataCollection = new MonthDataCollection();
-    this.monthDataCollection.fetch().done(_.bind(function(res){
-      this.setState({data : res});
-      this.setChart();
-    }, this));
+    this.setChart();
+  }
+
+  componentWillUpdate() {
+    this.setChart();
+  }
+
+  _getcurrentData() {
+    const month = moment.utc(this.props.timelineDate).month();
+    return this.state.data[0][month];
   }
 
   setChart() {
-    const data = this.state.data[0];
+    const data = this._getcurrentData();
     const width = $("#chart").width() + 20;
     const height = $("#chart").height() - 30;
 
     const svg = d3.select(".chart").append("svg")
       .attr("class", "chart-svg")
-      .append("g");
+      .html("g");
 
     const x = d3.scale.linear()
       .range([0, width]);

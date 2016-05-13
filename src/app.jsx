@@ -16,6 +16,7 @@ import TimelineView from './components/Timeline';
 import Router from './components/Router';
 import layersData from './layerSpec.json';
 import LayersSpecCollection from './components/Map/LayersSpecCollection';
+import monthDataCollection from './scripts/collection/MonthDataCollection';
 
 const mapOptions = {
   center: [40, -3],
@@ -94,19 +95,9 @@ class App extends React.Component {
 
     const updateTimelineDates = function(dates) {
       console.log('timeline dates', moment.utc(dates.to).format());
-      // this.setState({ timelineDates: dates });
-
-      router.update({
-        timelineDate: moment.utc(dates.to).format('YYYY-MM-DD')
-      });
-    };
-
-    const updateMapDates = function (dates) {
-      // this.setState({ mapDates: dates });
-
-      //MAP STATE CHANGE
-      // console.log(dates);
-      // this.mapView.state.set({ timelineDates: dates });
+      const date = moment.utc(dates.to).format('YYYY-MM-DD')
+      this.setState({ timelineDate: date });
+      router.update({ timelineDate: date });
     };
 
     const timelineParams = {
@@ -116,7 +107,6 @@ class App extends React.Component {
         unit: d3.time.month
       },
       triggerTimelineDates: updateTimelineDates.bind(this),
-      triggerMapDates: updateMapDates.bind(this),
       ticksAtExtremities: false
     };
 
@@ -125,8 +115,18 @@ class App extends React.Component {
   }
 
   componentDidMount() {
+    this._initData();
     this._initTimeline();
     this._setListeners();
+  }
+
+  _initData() {
+    /**
+     * To avoid extra renders before having the data, we set an extra param 'ready' to let the app now when it should initialize.
+     */
+    monthDataCollection.fetch().done(_.bind(function(res){
+      this.setState({ ready: true });
+    }, this));
   }
 
   activeLayer(layer) {
@@ -165,48 +165,42 @@ class App extends React.Component {
   }
 
   render() {
-    // Getting params from router before render map
-    // const center = [router.params.get('lat'), router.params.get('lng')];
-    // const layer = [router.params.get('layer')]
-    //
-    // _.extend(mapOptions, {
-    //   center: center[0] ? center : mapOptions.center,
-    //   zoom: router.params.get('zoom')  || mapOptions.zoom,
-    //   layer: layer
-    // });
-    //
+    let content = '';
+
+    if (this.state.ready) {
+      content =
+      <Dashboard
+        layersSpecCollection = { this.state.layersSpecCollection }
+        setLayer = { this.activeLayer.bind(this) }
+        openModal = { this.handleInfowindow.bind(this)}
+        timelineDate = { this.state.timelineDate }
+      />
+    }
 
     return (
-      <div>
-
-        <div className="l-app">
-          <Header />
-          <TableInfoWindow
-            isHidden= {this.state.tableInfoWindow.isHidden}
-            onClose={this.handleInfowindow.bind(this, 'tableInfoWindow')}
-           />
-          <DownloadInfoWindow
-            isHidden= {this.state.downloadInfoWindow.isHidden}
-            onClose={this.handleInfowindow.bind(this, 'downloadInfoWindow')}
-          />
-          <Map ref="Map"
-            mapOptions={ mapOptions }
-            layers = { this.state.layers }
-            // onLoad={ this.updateRouter.bind(this) }
-            onChange={ this.updateRouter.bind(this) }
-          />
-          <Dashboard
-            layersSpecCollection = { this.state.layersSpecCollection }
-            setLayer = { this.activeLayer.bind(this) }
-            openModal = { this.handleInfowindow.bind(this)}
-          />
-          <div id="timeline" className="l-timeline m-timeline" ref="Timeline">
-            <svg className="btn js-button">
-              <use xlinkHref="#icon-play" className="js-button-icon"></use>
-            </svg>
-            <div className="svg-container js-svg-container"></div>
-          </div>
+      <div className="l-app">
+        <Header />
+        <TableInfoWindow
+          isHidden= {this.state.tableInfoWindow.isHidden}
+          onClose={this.handleInfowindow.bind(this, 'tableInfoWindow')}
+         />
+        <DownloadInfoWindow
+          isHidden= {this.state.downloadInfoWindow.isHidden}
+          onClose={this.handleInfowindow.bind(this, 'downloadInfoWindow')}
+        />
+        <Map ref="Map"
+          mapOptions={ mapOptions }
+          layers = { this.state.layers }
+          // onLoad={ this.updateRouter.bind(this) }
+          onChange={ this.updateRouter.bind(this) }
+        />
+         <div id="timeline" className="l-timeline m-timeline" ref="Timeline">
+          <svg className="btn js-button">
+            <use xlinkHref="#icon-play" className="js-button-icon"></use>
+          </svg>
+          <div className="svg-container js-svg-container"></div>
         </div>
+        { content }
       </div>
     );
   }

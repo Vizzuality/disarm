@@ -421,9 +421,9 @@ TimelineView.prototype.triggerCursorDate = (function() {
 /* As the method needs to be debounce, we need to declare it outside of the
  * class or create it as an instance method */
 TimelineView.prototype.triggerCurrentData = (function() {
-  const triggerMapDates = _.debounce(function(dates) {
-    this.options.triggerMapDates(dates);
-  }, 100);
+  // const triggerMapDates = _.debounce(function(dates) {
+  //   this.options.triggerMapDates(dates);
+  // }, 100);
 
   return function() {
     const startDate  = moment.utc(this.scale.domain()[0]).toDate();
@@ -435,10 +435,10 @@ TimelineView.prototype.triggerCurrentData = (function() {
     }
 
     /* We trigger the range show with the last date with data */
-    triggerMapDates.call(this, {
-      from: startDate,
-      to: dataDate
-    });
+    // triggerMapDates.call(this, {
+    //   from: startDate,
+    //   to: dataDate
+    // });
   };
 })();
 
