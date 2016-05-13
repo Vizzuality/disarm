@@ -2,8 +2,8 @@
 
 import './styles.postcss';
 import React from 'react';
-import d3 from 'd3';
 import $ from 'jquery';
+import d3 from 'd3';
 import _ from 'underscore';
 import moment from 'moment';
 import monthDataCollection from './../../scripts/collection/MonthDataCollection';
@@ -19,19 +19,20 @@ class Chart extends React.Component {
   }
 
   componentDidMount() {
-    this.setChart();
+    this._setChart();
   }
 
   componentWillUpdate() {
-    this.setChart();
+    this._setChart();
   }
 
   _getcurrentData() {
-    const month = moment.utc(this.props.timelineDate).month();
-    return this.state.data[0][month];
+    this.month = moment(this.props.timelineDate).month();
+    return this.state.data[0][this.month];
   }
 
-  setChart() {
+  _setChart() {
+    this._removePreviousGraph();
     const data = this._getcurrentData();
     const width = $("#chart").width() + 20;
     const height = $("#chart").height() - 30;
@@ -89,11 +90,15 @@ class Chart extends React.Component {
       .attr("d", line);
   }
 
+  _removePreviousGraph() {
+    $('.chart-svg').remove();
+  }
+
   render() {
     return (
       <div ref="ChartElement" className="c-chart">
         <div id="chart" className="chart"></div>
-        <div className="chart-legend"><div className="legend-img"></div>Malaria cases (current month)</div>
+        <div className="chart-legend"><div className="legend-img"></div>{`Malaria cases (current month ${this.month})`}</div>
       </div>
     );
   }

@@ -123,6 +123,7 @@ class App extends React.Component {
   _initData() {
     /**
      * To avoid extra renders before having the data, we set an extra param 'ready' to let the app now when it should initialize.
+     * And we init all collections for the project at this time to avoid asyc issues later
      */
     monthDataCollection.fetch().done(_.bind(function(res){
       this.setState({ ready: true });
