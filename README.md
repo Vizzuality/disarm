@@ -7,8 +7,9 @@ Disaster Situation Analysis and Resource Management
 Requirements:
 
 * NodeJs 5.2+ [How to install](https://nodejs.org/download/)
+* Heroku toolbet [How to install](https://toolbelt.heroku.com)
 
-Install dependencies:
+Install project dependencies:
 
 	npm install
 
@@ -17,6 +18,21 @@ Install dependencies:
 To run the server:
 
 	npm start
+
+
+## Deploy
+
+Adding heroku existing app:
+
+```bash
+heroku git:remote -a disarm
+```
+
+To deploy using Heroku:
+
+```bash
+git push heroku master
+```
 
 ## Contributing
 
