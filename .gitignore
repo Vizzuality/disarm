@@ -12,7 +12,8 @@
 *.log*
 
 # Generated
-/dist
+/dist/*
+!/dist/*.json
 
 # ENV variables
 .env
