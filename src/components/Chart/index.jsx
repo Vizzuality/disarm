@@ -4,6 +4,7 @@ import './styles.postcss';
 import React from 'react';
 import d3 from 'd3';
 import $ from 'jquery';
+import MonthDataCollection from './../../scripts/collection/MonthDataCollection';
 
 class Chart extends React.Component {
 
