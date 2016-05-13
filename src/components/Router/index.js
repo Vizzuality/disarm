@@ -8,6 +8,13 @@ class Router extends Backbone.Router {
 
   initialize() {
     this.params = new ParamsModel();
+
+    this.route('', 'index', () => {
+      this.navigate('map', {trigger: true});
+    }).bind(this);
+
+    this.route('map', 'map');
+    this.route('about', 'about');
   }
 
   /**
