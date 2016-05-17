@@ -158,21 +158,4 @@ Map.propTypes = {
   onChange: React.PropTypes.func
 };
 
-Map.defaultProps = {
-  mapOptions: {
-    zoom: 5,
-    center: [40, -3], // Madrid
-    scrollWheelZoom: false,
-    basemapSpec: {
-      url: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
-      options: {
-        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-      }
-    }
-  },
-  legend: true,
-  onClick: function() {},
-  onChange: function() {}
-};
-
 export default Map;

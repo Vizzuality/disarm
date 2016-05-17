@@ -1,22 +1,27 @@
 [
   {
-    "slug": "border-countries",
-    "name": "Border countries",
+    "slug": "hfs_with_risk_test",
+    "name": "hfs_with_risk_test",
     "account": "simbiotica",
     "type": "cartodb",
-    "sql": "select * from world_borders",
-    "cartocss": "#world_borders_1 {polygon-fill: #ff0000; polygon-opacity: 0.5;}",
+    "sql": "select * from hfs_with_risk_test",
+    "cartocss": "#hfs_with_risk_test {marker-fill: #FF6600; polygon-opacity: 0.5;marker-line-color: #FFF;marker-line-width: 1;}",
     "active": true,
     "published": true,
     "zIndex": 0
   },
   {
-    "slug": "lakes",
-    "name": "Lakes",
+    "slug": "swz_malaria",
+    "name": "swz_malaria",
     "account": "simbiotica",
     "type": "cartodb",
-    "sql": "select * from ne_50m_lakes_1",
-    "cartocss": "#ne_50m_lakes_1 {polygon-fill: #FF6600; polygon-opacity: 0.7;line-width: 0.5;line-opacity: 1;}",
+    "isRaster": true,
+    "sublayers": [{
+      "sql": "select * from swz_malaria",
+      "cartocss": "#swz_malaria{raster-scaling:near;raster-colorizer-default-mode:linear;raster-colorizer-default-color: transparent;raster-colorizer-epsilon:0.1;raster-colorizer-stops:stop(0.002, rgba(142, 77, 59, 0.9));}",
+      "raster": true,
+      "raster_band": 1
+    }],
     "active": false,
     "published": true,
     "zIndex": 0
