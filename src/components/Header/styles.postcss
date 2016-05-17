@@ -8,15 +8,13 @@
   align-items: center;
 
   a {
-    display: flex;;
+    display: flex;
     align-items: center;
-
     text-decoration: none;
   }
 
   h1 {
     display: inline-block;
-
     color: $font-color-1;
     font-size: rem(32);
     font-weight: 500;
@@ -37,14 +35,26 @@
 }
 
 .c-navigation {
+  height: rem($header-height-mb);
+
   > ul {
     display: flex;
+    height: 100%;
     margin: 0;
     padding: 0;
   }
 
   ul > li {
     list-style: none;
+    display: flex;
+    align-items: center;
+
+    &.-current {
+      background-color: $color-1;
+      a {
+        color: $font-color-3;
+      }
+    }
   }
 
   a {
@@ -53,5 +63,9 @@
     text-transform: uppercase;
     text-decoration: none;
     color: $font-color-1;
+  }
+
+  @media screen and (min-width: $screen-m) {
+    height: rem($header-height);
   }
 }

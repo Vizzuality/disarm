@@ -37,11 +37,12 @@ class SwitcherItem extends React.Component {
           <input
           type="checkbox"
           name="layer-item"
+          id={this.state.name}
           onChange={ this._toggleStatus.bind(this) }
           setLayer={this.props.setLayer.bind(this)}
           defaultChecked={this.state.active}
           />
-          <label for="layer-item"></label>
+          <label htmlFor={this.state.name}></label>
         </div>
         <span className="c-switcher--label"> { this.props.name }</span>
       </div>

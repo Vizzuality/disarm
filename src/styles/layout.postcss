@@ -4,7 +4,7 @@
 $timeline-height: 75;
 $timeline-height-mb: 70;
 $credits-height-mb: 25;
-$l-margin-vt: 50;
+$l-margin-vt: 40;
 
 body {
   margin: 0;
@@ -50,10 +50,21 @@ body {
   top: rem($header-height-mb);
   left: 0;
   width: 100%;
-  height: 100%;
+  height: calc(100% - rem($header-height-mb));
 
   @media screen and (min-width: $screen-m) {
     top: rem($header-height);
+    height: calc(100% - rem($header-height));
+  }
+
+  .leaflet-left .leaflet-control {
+    margin-left: rem(15);
+    margin-top: rem(15);
+
+    @media screen and (min-width: $screen-m) {
+      margin-left: rem(25);
+      margin-top: rem(20);
+    }
   }
 }
 
@@ -113,14 +124,25 @@ body {
 }
 
 .l-dashboard {
-  z-index: 2;
   position: absolute;
-  top: rem(200);
-  left: rem(75);
-
+  box-sizing: border-box;
+  width: rem(360);
+  top: rem(100);
+  left: rem(65);
+  bottom: rem(150);
   padding: rem(15);
-
   background: $white;
+  z-index: 2;
+  overflow: auto;
+
+  @media screen and (min-width: $screen-m) {
+    top: rem(130);
+    left: rem(75);
+  }
+
+  @media screen and (max-height: rem(650)) {
+    bottom: rem(100);
+  }
 }
 
 .l-switcher {

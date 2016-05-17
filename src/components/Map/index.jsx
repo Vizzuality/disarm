@@ -2,7 +2,6 @@
 
 import _ from 'underscore';
 import React from 'react';
-import Legend from './Legend';
 import LayersSpecCollection from './LayersSpecCollection';
 
 class Map extends React.Component {
@@ -137,13 +136,8 @@ class Map extends React.Component {
   }
 
   render() {
-    let legend = null;
-    if (this.props.legend) {
-      legend = (<Legend layersSpec={ this.layerSpecCollection } />);
-    }
     return (
       <div ref="MapElement" className="l-map">
-        { legend }
       </div>
     );
   }
@@ -156,23 +150,6 @@ Map.propTypes = {
   onLoad: React.PropTypes.func,
   onClick: React.PropTypes.func,
   onChange: React.PropTypes.func
-};
-
-Map.defaultProps = {
-  mapOptions: {
-    zoom: 5,
-    center: [40, -3], // Madrid
-    scrollWheelZoom: false,
-    basemapSpec: {
-      url: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
-      options: {
-        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-      }
-    }
-  },
-  legend: true,
-  onClick: function() {},
-  onChange: function() {}
 };
 
 export default Map;

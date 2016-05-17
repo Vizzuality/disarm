@@ -14,12 +14,11 @@ import DownloadInfoWindow from './components/Infowindow/Download';
 import TableInfoWindow from './components/Infowindow/Table';
 import TimelineView from './components/Timeline';
 import Router from './components/Router';
-import layersData from './layerSpec.json';
 import LayersSpecCollection from './components/Map/LayersSpecCollection';
 
 const mapOptions = {
-  center: [40, -3],
-  zoom: 3,
+  center: [-26.799557733065328, 31.338500976562496], // Swaziland
+  zoom: 9,
   basemapSpec: {
     url: 'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
     options: {
@@ -35,14 +34,18 @@ const mapOptions = {
  */
 class AppRouter extends Router {}
 // Overriding default routes
-AppRouter.prototype.routes = {
-  '': function() {
-    console.info('you are on welcome');
-  },
-  'map': function() {
-    console.info('you are on map');
-  }
-};
+// AppRouter.prototype.routes = {
+//   '': function() {
+//     this.navigate('test', {trigger: true});
+//   },
+//
+//   'map': function() {
+//     console.info('you are on map');
+//   },
+//   'about': function() {
+//     console.info('you are on about');
+//   },
+// };
 const router = new AppRouter();
 
 /**
@@ -53,11 +56,8 @@ class App extends React.Component {
   constructor(props) {
     super(props);
 
-    const layersSpecCollection = LayersSpecCollection;
-    layersSpecCollection.set(layersData);
-
     this.state = {
-      layersSpecCollection: layersSpecCollection,
+      layersSpecCollection: LayersSpecCollection,
       mapOptions: mapOptions,
       downloadInfoWindow: {
         isHidden: true
@@ -141,6 +141,10 @@ class App extends React.Component {
     this.setState(this.state);
   }
 
+  onChangeRoute(route) {
+    this.setState({ route: route });
+  }
+
   _getRouterParams() {
     const newMapOptions = _.extend(mapOptions, {
       center: router.params.get('lat') ? [router.params.get('lat'), router.params.get('lng')] : mapOptions.center,
@@ -150,7 +154,10 @@ class App extends React.Component {
     //TODO: desactivate default layer.
     const layers = router.params.get('layers') ? router.params.get('layers') : [];
     const timelineDate = router.params.get('timelineDate') || this.state.timelineDate;
-    const newState = _.extend({}, newMapOptions, layers, timelineDate);
+    const currentRoute = {
+      route: router.currentRoute
+    };
+    const newState = _.extend({}, newMapOptions, layers, timelineDate, currentRoute);
 
     //This is to active a new layer and set it to collection.
     if (layers) {
@@ -165,22 +172,14 @@ class App extends React.Component {
   }
 
   render() {
-    // Getting params from router before render map
-    // const center = [router.params.get('lat'), router.params.get('lng')];
-    // const layer = [router.params.get('layer')]
-    //
-    // _.extend(mapOptions, {
-    //   center: center[0] ? center : mapOptions.center,
-    //   zoom: router.params.get('zoom')  || mapOptions.zoom,
-    //   layer: layer
-    // });
-    //
-
     return (
       <div>
 
         <div className="l-app">
-          <Header />
+          <Header
+            currentRoute= { this.state.route }
+            onChangeRoute= { this.onChangeRoute.bind(this) }
+           />
           <TableInfoWindow
             isHidden= {this.state.tableInfoWindow.isHidden}
             onClose={this.handleInfowindow.bind(this, 'tableInfoWindow')}
