@@ -11,8 +11,8 @@ class Header extends React.Component {
   }
 
   render() {
-    const isMap = this.props.currentRoute == 'map' ? '-current' : '';
-    const isAbout = this.props.currentRoute == 'about' ? '-current' : '';
+    const isMap = this.props.currentRoute == 'map' && '-current';
+    const isAbout = this.props.currentRoute == 'about' && '-current';
 
     return (
       <div className="l-header c-header">
@@ -24,10 +24,10 @@ class Header extends React.Component {
           </div>
           <nav className="c-navigation">
             <ul>
-              <li className={isMap}>
-                <a onClick={ this.props.onChangeRoute.bind(this, 'map') }href="#map">Map</a>
+              <li className={`${isMap} btn-map`}>
+                <a onClick={ this.props.onChangeRoute.bind(this, 'map') } href="#map">Map</a>
               </li>
-              <li className={isAbout}>
+              <li className={`${isAbout} btn-about`}>
                 <a onClick={ this.props.onChangeRoute.bind(this, 'about') } href="#about">About</a>
               </li>
             </ul>
