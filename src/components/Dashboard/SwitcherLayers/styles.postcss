@@ -18,18 +18,23 @@ $bg-color-active: $color-3;
 
   label {
     position: absolute;
+    z-index: 0;
     width: $width;
     height: $height;
     border: 0;
     background-color: $bg-switcher;
     border-radius: $height;
-    cursor: pointer;
     transition: .2s ease-in;
 
     &:after {
+      display: block;
       content: '';
-      @extend %centery;
+      margin: 0;
       z-index: 1;
+      position: absolute;
+      top: 50%;
+      -webkit-transform: translateY(-50%);
+      transform: translateY(-50%);
       left: 2px;
       width: calc($height - 4px);
       height: calc($height - 4px);
@@ -40,15 +45,8 @@ $bg-color-active: $color-3;
   }
 
   input {
-    /*@extend %clean-button-or-input;
-    @extend %centery;*/
+    @extend %clean-button-or-input;
     margin: 0;
-    appearance: none;
-    box-shadow: none;
-    background: none;
-    border: 0;
-    text-decoration: none;
-    outline: none;
     z-index: 1;
     position: absolute;
     top: 50%;
@@ -59,18 +57,19 @@ $bg-color-active: $color-3;
     height: calc($height - 4px);
     border-radius: 50%;
     background-color: $cursor-color;
-    /*opacity: 0;*/
+    opacity: 0;
     transition: .2s ease-in;
+    cursor: pointer;
   }
 
   input:checked {
-    left: calc($height - 4px + 1px) ;
+    left: calc($height - 4px + 1px);
     background-color: $cursor-color;
 
     & + label {
       // background-color: $bg-color-active;
       &:after {
-        left: $width - $height + 1px;
+        left: calc($height - 4px + 1px);
         background-color: $cursor-color;
       }
     }
