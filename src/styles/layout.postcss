@@ -50,10 +50,11 @@ body {
   top: rem($header-height-mb);
   left: 0;
   width: 100%;
-  height: 100%;
+  height: calc(100% - rem($header-height-mb));
 
   @media screen and (min-width: $screen-m) {
     top: rem($header-height);
+    height: calc(100% - rem($header-height));
   }
 }
 
