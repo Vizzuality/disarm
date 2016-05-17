@@ -137,13 +137,8 @@ class Map extends React.Component {
   }
 
   render() {
-    let legend = null;
-    if (this.props.legend) {
-      legend = (<Legend layersSpec={ this.layerSpecCollection } />);
-    }
     return (
       <div ref="MapElement" className="l-map">
-        { legend }
       </div>
     );
   }
