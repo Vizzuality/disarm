@@ -37,14 +37,27 @@
 }
 
 .c-navigation {
+  height: $header-height-mb;
+
   > ul {
     display: flex;
+    height: 100%;
     margin: 0;
     padding: 0;
   }
 
   ul > li {
     list-style: none;
+
+    display: flex;
+    align-items: center;
+
+    &.-current {
+      background-color: $color-1;
+      a {
+        color: $font-color-3;
+      }
+    }
   }
 
   a {
@@ -53,5 +66,9 @@
     text-transform: uppercase;
     text-decoration: none;
     color: $font-color-1;
+  }
+
+  @media screen and (min-width: $screen-m) {
+    height: rem($header-height);
   }
 }
