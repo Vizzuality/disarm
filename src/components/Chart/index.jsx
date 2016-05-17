@@ -49,8 +49,8 @@ class Chart extends React.Component {
 
   setChart() {
     const data = this.state.data;
-    const width = $("#chart").width() + 20;
-    const height = $("#chart").height() - 30;
+    const width = 269;
+    const height = 140;
 
     const svg = d3.select(".chart").append("svg")
       .attr("class", "chart-svg")

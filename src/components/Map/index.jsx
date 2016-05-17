@@ -2,7 +2,6 @@
 
 import _ from 'underscore';
 import React from 'react';
-import Legend from './Legend';
 import LayersSpecCollection from './LayersSpecCollection';
 
 class Map extends React.Component {
@@ -137,13 +136,8 @@ class Map extends React.Component {
   }
 
   render() {
-    let legend = null;
-    if (this.props.legend) {
-      legend = (<Legend layersSpec={ this.layerSpecCollection } />);
-    }
     return (
       <div ref="MapElement" className="l-map">
-        { legend }
       </div>
     );
   }
