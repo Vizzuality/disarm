@@ -56,6 +56,16 @@ body {
     top: rem($header-height);
     height: calc(100% - rem($header-height));
   }
+
+  .leaflet-left .leaflet-control {
+    margin-left: rem(15);
+    margin-top: rem(15);
+
+    @media screen and (min-width: $screen-m) {
+      margin-left: rem(25);
+      margin-top: rem(20);
+    }
+  }
 }
 
 .l-share {
@@ -117,13 +127,18 @@ body {
   position: absolute;
   box-sizing: border-box;
   width: rem(360);
-  top: rem(130);
-  left: rem(75);
+  top: rem(100);
+  left: rem(65);
   bottom: rem(150);
   padding: rem(15);
   background: $white;
   z-index: 2;
   overflow: auto;
+
+  @media screen and (min-width: $screen-m) {
+    top: rem(130);
+    left: rem(75);
+  }
 
   @media screen and (max-height: rem(650)) {
     bottom: rem(100);
