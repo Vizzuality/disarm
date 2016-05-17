@@ -2,7 +2,6 @@
 
 import _ from 'underscore';
 import React from 'react';
-import Legend from './Legend';
 import LayersSpecCollection from './LayersSpecCollection';
 
 class Map extends React.Component {
