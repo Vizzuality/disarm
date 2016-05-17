@@ -160,8 +160,8 @@ Map.propTypes = {
 
 Map.defaultProps = {
   mapOptions: {
-    zoom: 5,
-    center: [40, -3], // Madrid
+    zoom: 9,
+    center: [26.826521793655647, 31.01577758789062], // Swaziland
     scrollWheelZoom: false,
     basemapSpec: {
       url: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',

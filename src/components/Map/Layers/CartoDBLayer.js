@@ -1,6 +1,7 @@
 'use strict';
 
 import $ from 'jquery';
+import _ from 'underscore';
 
 /**
  * @example
@@ -21,15 +22,44 @@ class CartoDBLayer {
 
   createLayer(callback) {
     const account = this.options.account;
-    const layersSpec = [{
-      'user_name': account,
-      type: 'cartodb',
-      options: {
-        sql: this.options.sql,
-        cartocss: this.options.cartocss,
-        'cartocss_version': '2.3.0'
-      }
+    const isRaster = this.options.isRaster ? true : false;
+
+    // common params
+    let layersSpec = [{
+      user_name: account,
+      type: 'cartodb'
     }];
+
+    if (!isRaster) {
+
+
+      const layersParams = {
+        options: {
+          sql: this.options.sql,
+          cartocss: this.options.cartocss,
+          cartocss_version: '2.3.0'
+        }
+      };
+
+      _.extend(layersSpec[0], layersParams);
+
+    } else {
+
+      const rasterParams = {
+        options: {
+          sql: this.options.sublayers[0].sql,
+          cartocss: this.options.sublayers[0].cartocss,
+          raster: this.options.sublayers[0].raster,
+          raster_band: this.options.sublayers[0].raster_band,
+          geom_type: 'raster',
+          geom_column: 'the_raster_webmercator',
+          cartocss_version: '2.3.0'
+        }
+      };
+
+      _.extend(layersSpec[0], rasterParams);
+
+    }
 
     $.ajax({
       type: 'POST',

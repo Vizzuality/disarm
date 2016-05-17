@@ -3,6 +3,7 @@
 import _ from 'underscore';
 import Backbone from 'backbone';
 import LayerSpecModel from './LayerSpecModel';
+import layersData from '../../layerSpec.json';
 
 class LayersSpecCollection extends Backbone.Collection {
 
@@ -68,4 +69,4 @@ class LayersSpecCollection extends Backbone.Collection {
 
 LayersSpecCollection.prototype.model = LayerSpecModel;
 
-export default new LayersSpecCollection();
+export default new LayersSpecCollection(layersData);

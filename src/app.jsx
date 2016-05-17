@@ -14,12 +14,11 @@ import DownloadInfoWindow from './components/Infowindow/Download';
 import TableInfoWindow from './components/Infowindow/Table';
 import TimelineView from './components/Timeline';
 import Router from './components/Router';
-import layersData from './layerSpec.json';
 import LayersSpecCollection from './components/Map/LayersSpecCollection';
 
 const mapOptions = {
-  center: [40, -3],
-  zoom: 3,
+  center: [-26.799557733065328, 31.338500976562496], // Swaziland
+  zoom: 9,
   basemapSpec: {
     url: 'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
     options: {
@@ -57,11 +56,8 @@ class App extends React.Component {
   constructor(props) {
     super(props);
 
-    const layersSpecCollection = LayersSpecCollection;
-    layersSpecCollection.set(layersData);
-
     this.state = {
-      layersSpecCollection: layersSpecCollection,
+      layersSpecCollection: LayersSpecCollection,
       mapOptions: mapOptions,
       downloadInfoWindow: {
         isHidden: true
