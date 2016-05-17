@@ -4,7 +4,7 @@
 $timeline-height: 75;
 $timeline-height-mb: 70;
 $credits-height-mb: 25;
-$l-margin-vt: 50;
+$l-margin-vt: 40;
 
 body {
   margin: 0;
@@ -114,15 +114,20 @@ body {
 }
 
 .l-dashboard {
-  z-index: 2;
+  position: absolute;
   box-sizing: border-box;
   width: rem(360);
-  position: absolute;
-  top: rem(200);
+  top: rem(130);
   left: rem(75);
+  bottom: rem(150);
   padding: rem(15);
-
   background: $white;
+  z-index: 2;
+  overflow: auto;
+
+  @media screen and (max-height: rem(650)) {
+    bottom: rem(100);
+  }
 }
 
 .l-switcher {
