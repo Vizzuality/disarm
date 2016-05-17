@@ -158,21 +158,4 @@ Map.propTypes = {
   onChange: React.PropTypes.func
 };
 
-Map.defaultProps = {
-  mapOptions: {
-    zoom: 9,
-    center: [26.826521793655647, 31.01577758789062], // Swaziland
-    scrollWheelZoom: false,
-    basemapSpec: {
-      url: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
-      options: {
-        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-      }
-    }
-  },
-  legend: true,
-  onClick: function() {},
-  onChange: function() {}
-};
-
 export default Map;
