@@ -14,21 +14,33 @@ class Chart extends React.Component {
     super(props);
 
     this.state = {
-      data: monthDataCollection.toJSON()
-    }
+      data: this.props.data,
+      isReady: this.props.isReady
+    };
   }
 
   componentDidMount() {
-    this._setChart();
+    monthDataCollection.fetch().done( () => {
+      this.state = {
+        data: monthDataCollection.toJSON(),
+        isReady: !this.state.isReady
+      };
+
+      this._setChart();
+    });
   }
 
   componentDidUpdate() {
+    if(!this.state.isReady) {
+      return;
+    }
+
     this._setChart();
   }
 
   _getcurrentData() {
-    this.month = moment.utc(this.props.timelineDate).month();
-    return this.state.data[0][this.month];
+    const currentMonth = moment.utc(this.props.timelineDate).month();
+    return this.state.data[0][currentMonth];
   }
 
   _setChart() {
@@ -45,7 +57,7 @@ class Chart extends React.Component {
       .range([0, width]);
 
     const y = d3.scale.linear()
-        .range([height, 0]);
+      .range([height, 0]);
 
     x.domain([1, 30]);
     y.domain([0.1, 100]);
@@ -102,6 +114,11 @@ class Chart extends React.Component {
       </div>
     );
   }
+};
+
+Chart.defaultProps = {
+  data: null,
+  isReady: false
 };
 
 export default Chart;
