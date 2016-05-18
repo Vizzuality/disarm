@@ -2,6 +2,17 @@
 @import './../../../styles/settings.postcss';
 
 .c-share {
+  display: flex;
+  justify-content: space-between;
+
   border-top: rem(2) solid $color-1;
-  padding-bottom: rem(15);
+  padding: rem(8) 0;
+
+  > button:first-child {
+    padding-left: 0;
+  }
+
+  > button:last-child {
+    padding-right: 0;
+  }
 }
