@@ -29,7 +29,7 @@ class Map extends React.Component {
     // Setting basemap
     this.setBasemap();
     // Exposing some events
-    this.map.on('click', this.props.onClick);
+    // this.map.on('click', this.props.onClick);
     // this.map.on('load', this.props.onLoad); // This doesn't work -.-
     this.map.on('moveend', () => {
       const center = this.map.getCenter();

@@ -159,13 +159,21 @@ class App extends React.Component {
     };
     const newState = _.extend({}, newMapOptions, layers, timelineDate, currentRoute);
 
-    //This is to active a new layer and set it to collection.
-    if (layers) {
-      _.each(layers, _.bind(function(layer) {
-        const currentLayer = _.where(this.state.layersSpecCollection.toJSON(), { slug: layer })[0];
-        currentLayer.active = true;
-        this.activeLayer(currentLayer);
-      }, this))
+    if (layers.length > 0) {
+
+      _.each(LayersSpecCollection.models, (layerSpec) => {
+        layerSpec.set({active: false});
+      });
+
+      _.each(layers, (layerSlug) => {
+        const currentLayer = LayersSpecCollection.findWhere({ slug: layerSlug });
+
+        if (currentLayer) {
+          currentLayer.set({active: true});
+          this.activeLayer(currentLayer);
+        }
+
+      });
     }
 
     this.setState(newState);

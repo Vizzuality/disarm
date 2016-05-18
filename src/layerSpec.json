@@ -1,24 +1,24 @@
 [
   {
     "slug": "hfs_with_risk_test",
-    "name": "hfs_with_risk_test",
+    "name": "hfs with risk test",
     "account": "simbiotica",
     "type": "cartodb",
     "sql": "select * from hfs_with_risk_test",
     "cartocss": "#hfs_with_risk_test {marker-fill: #FF6600; polygon-opacity: 0.5;marker-line-color: #FFF;marker-line-width: 1;}",
     "active": true,
     "published": true,
-    "zIndex": 0
+    "zIndex": 1
   },
   {
     "slug": "swz_malaria",
-    "name": "swz_malaria",
+    "name": "swz malaria",
     "account": "simbiotica",
     "type": "cartodb",
     "isRaster": true,
     "sublayers": [{
       "sql": "select * from swz_malaria",
-      "cartocss": "#swz_malaria{raster-scaling:near;raster-colorizer-default-mode:linear;raster-colorizer-default-color: transparent;raster-colorizer-epsilon:0.1;raster-colorizer-stops:stop(0.002, rgba(142, 77, 59, 0.9));}",
+      "cartocss": "#swz_malaria{raster-scaling:near;raster-colorizer-default-mode:linear;raster-colorizer-default-color: transparent; raster-colorizer-epsilon:0.1;raster-colorizer-stops: stop(0, #90c16b) stop(0.1, #c69f38) stop(0.5, #ce721f) stop(1, #be0000) }",
       "raster": true,
       "raster_band": 1
     }],

@@ -2,8 +2,8 @@
 
 import _ from 'underscore';
 import Backbone from 'backbone';
-import LayerSpecModel from './LayerSpecModel';
 import layersData from '../../layerSpec.json';
+import LayerSpecModel from './LayerSpecModel';
 
 class LayersSpecCollection extends Backbone.Collection {
 
@@ -23,6 +23,8 @@ class LayersSpecCollection extends Backbone.Collection {
       layerSpec.instanceLayer()
         .createLayer((l) => {
           this.subscriber.addLayer(l);
+          const zIndex = layerSpec.get('zIndex');
+          l.setZIndex(zIndex)
           this._layers[id] = l;
         });
     } else if (!layer && layerSpec && layerSpec.instancedLayer) {
