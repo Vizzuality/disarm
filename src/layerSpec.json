@@ -1,7 +1,7 @@
 [
   {
     "slug": "hfs_with_risk_test",
-    "name": "hfs_with_risk_test",
+    "name": "hfs with risk test",
     "account": "simbiotica",
     "type": "cartodb",
     "sql": "select * from hfs_with_risk_test",
@@ -12,7 +12,7 @@
   },
   {
     "slug": "swz_malaria",
-    "name": "swz_malaria",
+    "name": "swz malaria",
     "account": "simbiotica",
     "type": "cartodb",
     "isRaster": true,
