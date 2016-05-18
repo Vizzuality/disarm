@@ -8,7 +8,7 @@
     "cartocss": "#hfs_with_risk_test {marker-fill: #FF6600; polygon-opacity: 0.5;marker-line-color: #FFF;marker-line-width: 1;}",
     "active": true,
     "published": true,
-    "zIndex": 0
+    "zIndex": 1
   },
   {
     "slug": "swz_malaria",
