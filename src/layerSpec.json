@@ -18,7 +18,7 @@
     "isRaster": true,
     "sublayers": [{
       "sql": "select * from swz_malaria",
-      "cartocss": "#swz_malaria{raster-scaling:near;raster-colorizer-default-mode:linear;raster-colorizer-default-color: transparent; raster-colorizer-epsilon:0.1;raster-colorizer-stops: stop(0, #90c16b) stop(0.1, #c69f38) stop(0.5, #ce721f) stop(1, #be0000) }",
+      "cartocss": "#swz_malaria{raster-scaling:near;raster-colorizer-default-mode:linear;raster-colorizer-default-color: transparent; raster-colorizer-epsilon:0.1;raster-colorizer-stops: stop(0, #1a9641) stop(0.1, #a6d96a) stop(0.3, #ffffbf) stop(0.6, #fdae61) stop(0.8, #d7191c) stop(1, #d7191c)}",
       "raster": true,
       "raster_band": 1
     }],
