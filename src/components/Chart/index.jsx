@@ -14,13 +14,18 @@ class Chart extends React.Component {
       month: this.props.month,
       data: []
     };
+    this.maxCases = 0;
   }
 
   componentWillReceiveProps() {
     chartCollection.getMonthCases(this.props.month).done(data=>{
       const dataTransformed = data.rows.map(date => ({cases: date.cases, day: parseInt(date.date.split('/')[1])}));
       this.setState({data: this.shortObjectArray(dataTransformed)});
-      this.setChart();
+      
+      chartCollection.getMaxCases().done(data => {
+        this.maxCases = data.rows[0].maxcases;
+        this.setChart();
+      });
     });
   }
 
@@ -31,9 +36,9 @@ class Chart extends React.Component {
   }
 
   setChart() {
-    const data = this.state.data;
-    const width = 269;
-    const height = 140;
+    const data = this.state.data,
+      width = 269,
+      height = 140;
 
     if(document.getElementsByClassName('chart')[0].childNodes[0]) {
       document.getElementsByClassName('chart')[0].childNodes[0].remove();
@@ -47,10 +52,12 @@ class Chart extends React.Component {
       .range([0, width]);
 
     const y = d3.scale.linear()
-        .range([height, 0]);
+        .range([height, 0])
+      .nice()
+        ;
 
     x.domain([1, 30]);
-    y.domain([0.1, 100]);
+    y.domain([0.1, this.maxCases]);
 
     this.setXAxis(svg, x);
     this.setYAxis(svg, y);
@@ -71,6 +78,7 @@ class Chart extends React.Component {
   setYAxis(svg, y) {
     const yAxis = d3.svg.axis()
       .scale(y)
+      .tickFormat(d3.format("d"))
       .orient("left");
 
     svg.append("g")
