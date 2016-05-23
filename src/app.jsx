@@ -66,7 +66,8 @@ class App extends React.Component {
         isHidden: true
       },
       layers: [],
-      timelineDate: moment.utc('2012-12-01').toDate()
+      timelineDate: moment.utc('2012-12-01').toDate(),
+      graph: true
     };
   }
 
@@ -91,7 +92,6 @@ class App extends React.Component {
   }
 
   _initTimeline() {
-
     const updateTimelineDates = function(dates) {
       console.log('timeline dates', moment.utc(dates.to).format());
       // this.setState({ timelineDates: dates });
@@ -126,8 +126,7 @@ class App extends React.Component {
 
   componentDidMount() {
     this._initTimeline();
-    this._setListeners();
-  }
+    this._setListeners();  }
 
   activeLayer(layer) {
     this.state.layersSpecCollection.setCurrentLayer(layer);
@@ -206,6 +205,7 @@ class App extends React.Component {
             layersSpecCollection = { this.state.layersSpecCollection }
             setLayer = { this.activeLayer.bind(this) }
             openModal = { this.handleInfowindow.bind(this)}
+            graph = { this.state.graph }
           />
           <div id="timeline" className="l-timeline m-timeline" ref="Timeline">
             <svg className="btn js-button">
