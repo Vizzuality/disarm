@@ -95,10 +95,12 @@ class App extends React.Component {
     const updateTimelineDates = function(dates) {
       console.log('timeline dates', moment.utc(dates.to).format());
       // this.setState({ timelineDates: dates });
+      const timelineDate = moment.utc(dates.to).format('YYYY-MM-DD');
 
       router.update({
-        timelineDate: moment.utc(dates.to).format('YYYY-MM-DD')
+        timelineDate
       });
+      this.setState({timelineDate});
     };
 
     const updateMapDates = function (dates) {
@@ -179,6 +181,11 @@ class App extends React.Component {
     this.setState(newState);
   }
 
+  getMonth() {
+    let date = this.state.timelineDate;
+    return date.split('-')[1];
+  }
+
   render() {
     return (
       <div>
@@ -206,6 +213,8 @@ class App extends React.Component {
             layersSpecCollection = { this.state.layersSpecCollection }
             setLayer = { this.activeLayer.bind(this) }
             openModal = { this.handleInfowindow.bind(this)}
+
+            month = { this.getMonth() }
           />
           <div id="timeline" className="l-timeline m-timeline" ref="Timeline">
             <svg className="btn js-button">
