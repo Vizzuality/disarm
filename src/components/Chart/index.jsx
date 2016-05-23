@@ -19,8 +19,14 @@ class Chart extends React.Component {
   componentWillReceiveProps() {
     chartCollection.getMonthCases(this.props.month).done(data=>{
       const dataTransformed = data.rows.map(date => ({cases: date.cases, day: parseInt(date.date.split('/')[1])}));
-      this.setState({data: dataTransformed});
+      this.setState({data: this.shortObjectArray(dataTransformed)});
       this.setChart();
+    });
+  }
+
+  shortObjectArray(data) {
+    return data.sort(function(a, b) {
+      return a.day - b.day;
     });
   }
 
