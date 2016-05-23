@@ -11,14 +11,14 @@
     "zIndex": 1
   },
   {
-    "slug": "swz_malaria",
+    "slug": "test1_",
     "name": "swz malaria",
-    "account": "simbiotica",
+    "account": "disarm",
     "type": "cartodb",
     "isRaster": true,
     "sublayers": [{
-      "sql": "select * from swz_malaria",
-      "cartocss": "#swz_malaria{raster-scaling:near;raster-colorizer-default-mode:linear;raster-colorizer-default-color: transparent; raster-colorizer-epsilon:0.1;raster-colorizer-stops: stop(0, #1a9641) stop(0.1, #a6d96a) stop(0.3, #ffffbf) stop(0.6, #fdae61) stop(0.8, #d7191c) stop(1, #d7191c)}",
+      "sql": "select * from test1_",
+      "cartocss": "#test1_{raster-scaling:near;raster-colorizer-default-mode:linear;raster-colorizer-default-color: transparent; raster-colorizer-epsilon:0.1;raster-colorizer-stops: stop(0.00000001, #fee) stop(0.0001, #000)}",
       "raster": true,
       "raster_band": 1
     }],
