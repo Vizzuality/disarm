@@ -1,0 +1,24 @@
+@import './../../../styles/settings.postcss';
+
+.m-legend {
+  
+  ul > .legend-item {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    margin: rem(10) 0;
+  }
+
+  .legend-item > .bucket {
+    display: inline-block;
+    width: rem(18);
+    height: rem(18);
+    margin-right: rem(15);
+
+    border: rem(1) solid $color-1;
+  }
+
+  .legend-item > .text-legend {
+    font-size: rem(10);
+  }
+}

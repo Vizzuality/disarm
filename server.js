@@ -13,6 +13,7 @@ const auth = require('basic-auth')
 // Configuring App
 const app = express();
 
+//Aouth
 app.use(function(req, res, next){
   var credentials = auth(req)
 
@@ -48,8 +49,6 @@ if (isDevelop) {
   });
 
 } else {
-  //Aouth
-
 
   app.use(express.static(__dirname + '/dist'));
 
