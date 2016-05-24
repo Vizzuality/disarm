@@ -66,7 +66,8 @@ class App extends React.Component {
         isHidden: true
       },
       layers: [],
-      timelineDate: '2012-12-01'
+      timelineDate: '2012-12-01',
+      graph: true
     };
   }
 
@@ -80,7 +81,12 @@ class App extends React.Component {
     router.start();
     this.setState(router.params.attributes);
     router.on('route', () => {
-      this.setState(router.params.attributes);
+      const newState = router.params.attributes;
+      if(router.params.get('graph')) {
+        newState['graph'] = router.params.get('graph') === 'true';
+      }
+      else newState['graph'] = true;
+      this.setState(newState);
     });
 
     this._getRouterParams();
@@ -91,7 +97,6 @@ class App extends React.Component {
   }
 
   _initTimeline() {
-
     const updateTimelineDates = function(dates) {
       console.log('timeline dates', moment.utc(dates.to).format());
       // this.setState({ timelineDates: dates });
@@ -128,7 +133,7 @@ class App extends React.Component {
 
   componentDidMount() {
     this._initTimeline();
-    this._setListeners();
+    this._setListeners(); 
   }
 
   activeLayer(layer) {
@@ -159,7 +164,11 @@ class App extends React.Component {
     const currentRoute = {
       route: router.currentRoute
     };
-    const newState = _.extend({}, newMapOptions, layers, timelineDate, currentRoute);
+    let graph = true;
+    if(router.params.get('graph')) {
+      graph = router.params.get('graph') === 'true';
+    }
+    const newState = _.extend({}, newMapOptions, layers, timelineDate, graph, currentRoute);
 
     if (layers.length > 0) {
 
@@ -177,7 +186,6 @@ class App extends React.Component {
 
       });
     }
-
     this.setState(newState);
   }
 
@@ -213,6 +221,7 @@ class App extends React.Component {
             setLayer = { this.activeLayer.bind(this) }
             openModal = { this.handleInfowindow.bind(this)}
             month = { this.getMonth() }
+            graph = { this.state.graph }
           />
           <div id="timeline" className="l-timeline m-timeline" ref="Timeline">
             <svg className="btn js-button">

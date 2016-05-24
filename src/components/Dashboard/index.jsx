@@ -22,7 +22,7 @@ class Dashboard extends React.Component {
         <SwitcherLayers
           setLayer={ this.props.setLayer.bind(this) }
         />
-        <Chart month = { this.props.month } />
+        { this.props.graph === true && <Chart month = { this.props.month } /> }
         <Share
           openModal = { this.props.openModal }
          />
