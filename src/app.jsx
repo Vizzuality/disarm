@@ -81,7 +81,12 @@ class App extends React.Component {
     router.start();
     this.setState(router.params.attributes);
     router.on('route', () => {
-      this.setState(router.params.attributes);
+      const newState = router.params.attributes;
+      if(router.params.get('graph')) {
+        newState['graph'] = router.params.get('graph') === 'true';
+      }
+      else newState['graph'] = true;
+      this.setState(newState);
     });
 
     this._getRouterParams();
@@ -126,7 +131,8 @@ class App extends React.Component {
 
   componentDidMount() {
     this._initTimeline();
-    this._setListeners();  }
+    this._setListeners(); 
+  }
 
   activeLayer(layer) {
     this.state.layersSpecCollection.setCurrentLayer(layer);
@@ -156,7 +162,11 @@ class App extends React.Component {
     const currentRoute = {
       route: router.currentRoute
     };
-    const newState = _.extend({}, newMapOptions, layers, timelineDate, currentRoute);
+    let graph = true;
+    if(router.params.get('graph')) {
+      graph = router.params.get('graph') === 'true';
+    }
+    const newState = _.extend({}, newMapOptions, layers, timelineDate, graph, currentRoute);
 
     if (layers.length > 0) {
 
@@ -174,7 +184,6 @@ class App extends React.Component {
 
       });
     }
-
     this.setState(newState);
   }
 

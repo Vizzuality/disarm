@@ -21,7 +21,7 @@ class Dashboard extends React.Component {
         <SwitcherLayers
           setLayer={ this.props.setLayer.bind(this) }
         />
-        { this.props.graph === 'true' && <Chart /> }
+        { this.props.graph === true && <Chart /> }
         <Share
           openModal = { this.props.openModal }
          />
