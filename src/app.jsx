@@ -66,7 +66,7 @@ class App extends React.Component {
         isHidden: true
       },
       layers: [],
-      timelineDate: moment.utc('2012-12-01').toDate()
+      timelineDate: '2012-12-01'
     };
   }
 
@@ -183,7 +183,8 @@ class App extends React.Component {
 
   getMonth() {
     let date = this.state.timelineDate;
-    return date.split('-')[1];
+    date = moment(date);
+    return date.month()-1;
   }
 
   render() {
