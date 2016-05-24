@@ -182,15 +182,13 @@ class App extends React.Component {
   }
 
   getMonth() {
-    let date = this.state.timelineDate;
-    date = moment(date);
+    const date = moment(this.state.timelineDate);
     return date.month()+1;
   }
 
   render() {
     return (
       <div>
-
         <div className="l-app">
           <Header
             currentRoute= { this.state.route }
@@ -214,7 +212,6 @@ class App extends React.Component {
             layersSpecCollection = { this.state.layersSpecCollection }
             setLayer = { this.activeLayer.bind(this) }
             openModal = { this.handleInfowindow.bind(this)}
-
             month = { this.getMonth() }
           />
           <div id="timeline" className="l-timeline m-timeline" ref="Timeline">

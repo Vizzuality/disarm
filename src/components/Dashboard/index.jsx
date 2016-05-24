@@ -14,6 +14,7 @@ class Dashboard extends React.Component {
     super(props);
   }
 
+
   render() {
     return (
       <div id="dashboard" className="l-dashboard c-dashboard">
@@ -21,7 +22,7 @@ class Dashboard extends React.Component {
         <SwitcherLayers
           setLayer={ this.props.setLayer.bind(this) }
         />
-        <Chart month = {this.props.month} />
+        <Chart month = { this.props.month } />
         <Share
           openModal = { this.props.openModal }
          />

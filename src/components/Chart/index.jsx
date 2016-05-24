@@ -12,25 +12,31 @@ class Chart extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      month: this.props.month,
+      month: 1,
       data: []
     };
     this.maxCases = 0;
   }
 
-  componentWillReceiveProps() {
-    chartCollection.getMonthCases(this.props.month).done(data=>{
-      const dataTransformed = data.rows.map(date => {
+  printChart() {
+    chartCollection.getMonthCases(this.props.month).done( data=>{
+      const dataTransformed = data.rows.map( date => {
         let dateMoment = moment(date.date.replace(/\//g, '-'), 'MM-DD-YY');
-        return { cases: date.cases, day: parseInt(dateMoment.month()+1) };
+        return { cases: date.cases, day: parseInt(dateMoment.date()) };
       });
       this.setState({data: this.shortObjectArray(dataTransformed)});
       
       chartCollection.getMaxCases().done(data => {
         this.maxCases = data.rows[0].maxcases;
         this.setChart();
+        this.setState({month: this.props.month});
       });
     });
+  }
+  componentDidUpdate() {
+    if(this.state.month !== this.props.month) {
+      this.printChart();
+    }
   }
 
   shortObjectArray(data) {
