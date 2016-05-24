@@ -66,7 +66,8 @@ class App extends React.Component {
         isHidden: true
       },
       layers: [],
-      timelineDate: moment.utc('2012-12-01').toDate()
+      timelineDate: moment.utc('2012-12-01').toDate(),
+      graph: true
     };
   }
 
@@ -80,7 +81,12 @@ class App extends React.Component {
     router.start();
     this.setState(router.params.attributes);
     router.on('route', () => {
-      this.setState(router.params.attributes);
+      const newState = router.params.attributes;
+      if(router.params.get('graph')) {
+        newState['graph'] = router.params.get('graph') === 'true';
+      }
+      else newState['graph'] = true;
+      this.setState(newState);
     });
 
     this._getRouterParams();
@@ -91,7 +97,6 @@ class App extends React.Component {
   }
 
   _initTimeline() {
-
     const updateTimelineDates = function(dates) {
       console.log('timeline dates', moment.utc(dates.to).format());
       // this.setState({ timelineDates: dates });
@@ -126,7 +131,7 @@ class App extends React.Component {
 
   componentDidMount() {
     this._initTimeline();
-    this._setListeners();
+    this._setListeners(); 
   }
 
   activeLayer(layer) {
@@ -157,7 +162,11 @@ class App extends React.Component {
     const currentRoute = {
       route: router.currentRoute
     };
-    const newState = _.extend({}, newMapOptions, layers, timelineDate, currentRoute);
+    let graph = true;
+    if(router.params.get('graph')) {
+      graph = router.params.get('graph') === 'true';
+    }
+    const newState = _.extend({}, newMapOptions, layers, timelineDate, graph, currentRoute);
 
     if (layers.length > 0) {
 
@@ -175,7 +184,6 @@ class App extends React.Component {
 
       });
     }
-
     this.setState(newState);
   }
 
@@ -206,6 +214,7 @@ class App extends React.Component {
             layersSpecCollection = { this.state.layersSpecCollection }
             setLayer = { this.activeLayer.bind(this) }
             openModal = { this.handleInfowindow.bind(this)}
+            graph = { this.state.graph }
           />
           <div id="timeline" className="l-timeline m-timeline" ref="Timeline">
             <svg className="btn js-button">
