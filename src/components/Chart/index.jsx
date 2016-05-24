@@ -12,15 +12,18 @@ class Chart extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      month: 1,
       data: []
     };
     this.maxCases = 0;
   }
 
   printChart() {
-    chartCollection.getMonthCases(this.props.month).done( data=>{
-      const dataTransformed = data.rows.map( date => {
+    chartCollection.getMonthCases().done( data => {
+      const monthDates = data.rows.filter( date => {
+        let dayDate = moment(date.date.replace(/\//g, '-'), 'MM-DD-YY');
+        return dayDate.month() + 1 === this.props.month;
+      });
+      const dataTransformed = monthDates.map( date => {
         let dateMoment = moment(date.date.replace(/\//g, '-'), 'MM-DD-YY');
         return { cases: date.cases, day: parseInt(dateMoment.date()) };
       });
@@ -33,6 +36,7 @@ class Chart extends React.Component {
       });
     });
   }
+
   componentDidUpdate() {
     if(this.state.month !== this.props.month) {
       this.printChart();
