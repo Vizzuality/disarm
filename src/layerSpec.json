@@ -5,7 +5,8 @@
     "account": "simbiotica",
     "type": "cartodb",
     "sql": "select * from hfs_with_risk_test",
-    "cartocss": "#hfs_with_risk_test {marker-fill: #FF6600; polygon-opacity: 0.5;marker-line-color: #FFF;marker-line-width: 1;}",
+    "cartocss": "#hfs_with_risk_test {marker-fill: #ff6600; polygon-opacity: 0.5;marker-line-color: #fff;marker-line-width: 1;}",
+    "legend": { "type": "choroplet", "buckets": [{ "literal":"Facilities", "color":"#ff6600"}]},
     "active": true,
     "published": true,
     "zIndex": 1
@@ -22,6 +23,7 @@
       "raster": true,
       "raster_band": 1
     }],
+    "legend": { "type": "raster", "buckets": [{ "literal":"> 0.4", "color":"#1a9641"}, { "literal":"0.3", "color":"#a6d96a"}, { "literal":"0.2", "color":"#ffffbf"}, { "literal":"0.1", "color":"#fdae61"}, { "literal":"0", "color":"#d7191c"}] },
     "active": false,
     "published": true,
     "zIndex": 0
@@ -34,6 +36,7 @@
     "sql": "select * from hfrisk",
     "interactivity": ["facility_name"],
     "cartocss": "#hfs_with_risk_test {marker-fill: #FF6600; polygon-opacity: 0.5;marker-line-color: #FFF;marker-line-width: 1;}",
+    "legend": { "type": "choroplet", "buckets": [{ "literal":"Facilities", "color":"#ff6600"}]},
     "active": false,
     "published": true,
     "zIndex": 1
