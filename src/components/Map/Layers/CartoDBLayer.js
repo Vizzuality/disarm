@@ -3,6 +3,10 @@
 import $ from 'jquery';
 import _ from 'underscore';
 
+import '../styles.postcss';
+
+import infowindowTemplate from '../infowindow.handlebars';
+
 /**
  * @example
  * const layer = new CartoDBLayer({
@@ -23,6 +27,7 @@ class CartoDBLayer {
   createLayer(callback) {
     const account = this.options.account;
     const isRaster = this.options.isRaster ? true : false;
+    const hasInteractivity = this.options.hasOwnProperty('interactivity');
 
     // common params
     let layersSpec = [{
@@ -31,7 +36,6 @@ class CartoDBLayer {
     }];
 
     if (!isRaster) {
-
 
       const layersParams = {
         options: {
@@ -61,20 +65,60 @@ class CartoDBLayer {
 
     }
 
-    $.ajax({
-      type: 'POST',
-      dataType: 'json',
-      contentType: 'application/json; charset=UTF-8',
-      url: `http://${account}.cartodb.com/api/v1/map/`,
-      data: JSON.stringify({layers: layersSpec}),
-      success: (data) => {
-        const tileUrl = `https://${account}.cartodb.com/api/v1/map/${data.layergroupid}/{z}/{x}/{y}.png32`;
-        this.layer = L.tileLayer(tileUrl);
-        if (callback && typeof callback === 'function') {
-          callback(this.layer);
+    if (!hasInteractivity) {
+
+      $.ajax({
+        type: 'POST',
+        dataType: 'json',
+        contentType: 'application/json; charset=UTF-8',
+        url: `http://${account}.cartodb.com/api/v1/map/`,
+        data: JSON.stringify({layers: layersSpec}),
+        success: (data) => {
+          const tileUrl = `https://${account}.cartodb.com/api/v1/map/${data.layergroupid}/{z}/{x}/{y}.png32`;
+          this.layer = L.tileLayer(tileUrl);
+          if (callback && typeof callback == 'function') {
+            callback(this.layer);
+          }
         }
-      }
-    });
+      });
+    } else {
+
+      const query = layersSpec[0].options.sql;
+
+      $.ajax({
+        type: 'POST',
+        dataType: 'json',
+        url: `http://${account}.cartodb.com/api/v2/sql?q=`,
+        data: {
+          q: query,
+          format: 'geojson'
+        },
+        success: (geojson) => {
+
+          var layer = L.geoJson(geojson, {
+            pointToLayer: (feature, latlng) => {
+              const data = {
+                facilityName: feature.properties.facility_name
+              };
+              const infowindow = infowindowTemplate(data);
+              const areaIcon = L.divIcon({
+                className: 'm-marker'
+              });
+
+              return L.marker(latlng,{icon: areaIcon}).bindPopup(infowindow, {
+                className: 'm-infowindow'
+              });
+            }
+
+          });
+
+          if (callback && typeof callback == 'function') {
+            callback(layer);
+          }
+        }
+      });
+    }
+
   }
 
   /**

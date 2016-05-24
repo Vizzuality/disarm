@@ -40,6 +40,7 @@ const config = {
       {test: /\.(js|jsx)$/, loader: 'babel-loader', exclude: /node_modules/},
       {test: /\.json$/, loader: 'json-loader'},
       {test: /\.(postcss$|css$)/, loader: 'style-loader!css-loader!postcss-loader'},
+      { test: /\.handlebars$/, loader: "handlebars-loader" }
     ]
   },
 
