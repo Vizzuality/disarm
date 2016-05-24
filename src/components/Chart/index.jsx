@@ -4,6 +4,7 @@ import './styles.postcss';
 import React from 'react';
 import d3 from 'd3';
 import $ from 'jquery';
+import moment from 'moment';
 import chartCollection from './../../scripts/collections/chartCollection';
 
 class Chart extends React.Component {
@@ -19,7 +20,10 @@ class Chart extends React.Component {
 
   componentWillReceiveProps() {
     chartCollection.getMonthCases(this.props.month).done(data=>{
-      const dataTransformed = data.rows.map(date => ({cases: date.cases, day: parseInt(date.date.split('/')[1])}));
+      const dataTransformed = data.rows.map(date => {
+        let dateMoment = moment(date.date.replace(/\//g, '-'), 'MM-DD-YY');
+        return { cases: date.cases, day: parseInt(dateMoment.month()+1) };
+      });
       this.setState({data: this.shortObjectArray(dataTransformed)});
       
       chartCollection.getMaxCases().done(data => {

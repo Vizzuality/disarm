@@ -184,7 +184,7 @@ class App extends React.Component {
   getMonth() {
     let date = this.state.timelineDate;
     date = moment(date);
-    return date.month()-1;
+    return date.month()+1;
   }
 
   render() {
