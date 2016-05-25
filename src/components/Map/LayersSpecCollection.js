@@ -35,11 +35,7 @@ class LayersSpecCollection extends Backbone.Collection {
   }
 
   updateLayer(id, currentMonth) {
-    //Remove current instance from map
-    const layer = this.getLayer(id);
-    this.subscriber.removeLayer(layer);
-
-    //add new instance
+    //add new instance but just after removing the current one with same id
     const layerSpec = this.get(id);
     console.log(layerSpec)
     layerSpec.instanceLayer(currentMonth)
