@@ -4,53 +4,59 @@ import './styles.postcss';
 import React from 'react';
 import d3 from 'd3';
 import $ from 'jquery';
+import moment from 'moment';
+import chartCollection from './../../scripts/collections/chartCollection';
 
 class Chart extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      data: [
-          {
-            "day": 1,
-            "count": 0
-          },
-          {
-            "day": 3,
-            "count": 20
-          },
-          {
-            "day": 8,
-            "count": 55
-          },
-          {
-            "day": 14,
-            "count": 33
-          },
-          {
-            "day": 19,
-            "count": 72
-          },
-          {
-            "day": 24,
-            "count": 10
-          },
-          {
-            "day": 29,
-            "count": 99
-          }
-        ]
+      data: []
     };
+    this.maxCases = 0;
   }
 
-  componentDidMount() {
-    this.setChart();
+  printChart() {
+    chartCollection.getMonthCases().done( data => {
+      const monthDates = data.rows.filter( date => {
+        let dayDate = moment(date.date.replace(/\//g, '-'), 'MM-DD-YY');
+        return dayDate.month() + 1 === this.props.month;
+      });
+      const dataTransformed = monthDates.map( date => {
+        let dateMoment = moment(date.date.replace(/\//g, '-'), 'MM-DD-YY');
+        return { cases: date.cases, day: parseInt(dateMoment.date()) };
+      });
+      this.setState({data: this.shortObjectArray(dataTransformed)});
+      
+      chartCollection.getMaxCases().done(data => {
+        this.maxCases = data.rows[0].maxcases;
+        this.setChart();
+        this.setState({month: this.props.month});
+      });
+    });
+  }
+
+  componentDidUpdate() {
+    if(this.state.month !== this.props.month) {
+      this.printChart();
+    }
+  }
+
+  shortObjectArray(data) {
+    return data.sort(function(a, b) {
+      return a.day - b.day;
+    });
   }
 
   setChart() {
-    const data = this.state.data;
-    const width = 269;
-    const height = 140;
+    const data = this.state.data,
+      width = 269,
+      height = 140;
+
+    if(document.getElementsByClassName('chart')[0].childNodes[0]) {
+      document.getElementsByClassName('chart')[0].childNodes[0].remove();
+    }
 
     const svg = d3.select(".chart").append("svg")
       .attr("class", "chart-svg")
@@ -60,10 +66,12 @@ class Chart extends React.Component {
       .range([0, width]);
 
     const y = d3.scale.linear()
-        .range([height, 0]);
+        .range([height, 0])
+      .nice()
+        ;
 
     x.domain([1, 30]);
-    y.domain([0.1, 100]);
+    y.domain([0.1, this.maxCases]);
 
     this.setXAxis(svg, x);
     this.setYAxis(svg, y);
@@ -84,6 +92,7 @@ class Chart extends React.Component {
   setYAxis(svg, y) {
     const yAxis = d3.svg.axis()
       .scale(y)
+      .tickFormat(d3.format("d"))
       .orient("left");
 
     svg.append("g")
@@ -96,7 +105,7 @@ class Chart extends React.Component {
     const line = d3.svg.line()
       .interpolate("monotone")
       .x(function(d) { return x(d.day); })
-      .y(function(d) { return y(d.count); });
+      .y(function(d) { return y(d.cases); });
 
     svg.append("path")
       .datum(data)

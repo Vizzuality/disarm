@@ -66,7 +66,7 @@ class App extends React.Component {
         isHidden: true
       },
       layers: [],
-      timelineDate: moment.utc('2012-12-01').toDate(),
+      timelineDate: '2012-12-01',
       graph: true
     };
   }
@@ -100,10 +100,12 @@ class App extends React.Component {
     const updateTimelineDates = function(dates) {
       console.log('timeline dates', moment.utc(dates.to).format());
       // this.setState({ timelineDates: dates });
+      const timelineDate = moment.utc(dates.to).format('YYYY-MM-DD');
 
       router.update({
-        timelineDate: moment.utc(dates.to).format('YYYY-MM-DD')
+        timelineDate
       });
+      this.setState({timelineDate});
     };
 
     const updateMapDates = function (dates) {
@@ -187,10 +189,14 @@ class App extends React.Component {
     this.setState(newState);
   }
 
+  getMonth() {
+    const date = moment(this.state.timelineDate);
+    return date.month()+1;
+  }
+
   render() {
     return (
       <div>
-
         <div className="l-app">
           <Header
             currentRoute= { this.state.route }
@@ -214,6 +220,7 @@ class App extends React.Component {
             layersSpecCollection = { this.state.layersSpecCollection }
             setLayer = { this.activeLayer.bind(this) }
             openModal = { this.handleInfowindow.bind(this)}
+            month = { this.getMonth() }
             graph = { this.state.graph }
           />
           <div id="timeline" className="l-timeline m-timeline" ref="Timeline">
