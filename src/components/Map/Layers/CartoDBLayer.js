@@ -52,10 +52,10 @@ class CartoDBLayer {
 
       const rasterParams = {
         options: {
-          sql: this.options.sublayers[0].sql,
-          cartocss: this.options.sublayers[0].cartocss,
-          raster: this.options.sublayers[0].raster,
-          raster_band: this.options.sublayers[0].raster_band,
+          sql: this.options.sql,
+          cartocss: this.options.cartocss,
+          raster: this.options.raster,
+          raster_band: this.options.raster_band,
           geom_type: 'raster',
           geom_column: 'the_raster_webmercator',
           cartocss_version: '2.3.0'
@@ -119,7 +119,6 @@ class CartoDBLayer {
         }
       });
     }
-
   }
 
   /**
