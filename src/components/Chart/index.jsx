@@ -27,7 +27,8 @@ class Chart extends React.Component {
         let dateMoment = moment(date.date.replace(/\//g, '-'), 'MM-DD-YY');
         return { cases: date.cases, day: parseInt(dateMoment.date()) };
       });
-      this.setState({data: this.shortObjectArray(dataTransformed)});
+
+      this.setState({data: this.fillData(dataTransformed)});
       
       chartCollection.getMaxCases().done(data => {
         this.maxCases = data.rows[0].maxcases;
@@ -49,6 +50,20 @@ class Chart extends React.Component {
     });
   }
 
+  fillData(data) {
+    let fullMonth = [];
+    for(let i = 1; i <= 31; i++) {
+      const day = data.filter(day => day.day === i );
+      if(day.length !== 0) {
+        fullMonth.push(day[0]);
+      }
+      else {
+        fullMonth.push({day: i, cases: 0});
+      }
+    }
+    return fullMonth;
+  }
+
   setChart() {
     const data = this.state.data,
       width = 269,
@@ -62,25 +77,27 @@ class Chart extends React.Component {
       .attr("class", "chart-svg")
       .append("g");
 
-    const x = d3.scale.linear()
-      .range([0, width]);
+    const x = d3.scale.ordinal()
+      .rangeRoundBands([0, width], .1);
 
     const y = d3.scale.linear()
         .range([height, 0])
       .nice()
         ;
 
-    x.domain([1, 30]);
+    x.domain(this.state.data.map(function(d) { return d.day; }));
     y.domain([0.1, this.maxCases]);
 
     this.setXAxis(svg, x);
     this.setYAxis(svg, y);
-    this.setLine(svg, x, y, data);
+    //this.setLine(svg, x, y, data);
+    this.setBars(svg, x, y, height);
   }
 
   setXAxis(svg, x) {
     const xAxis = d3.svg.axis()
       .scale(x)
+      .tickValues([1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31])
       .orient("bottom");
 
     svg.append("g")
@@ -112,6 +129,17 @@ class Chart extends React.Component {
       .attr("class", "line")
       .attr("transform", "translate(24, 6)")
       .attr("d", line);
+  }
+
+  setBars(svg, x, y, height) {
+    svg.selectAll(".bar")
+      .data(this.state.data)
+    .enter().append("rect")
+      .attr("class", "bar")
+      .attr("x", function(d) { return x(d.day) + 24; })
+      .attr("width", x.rangeBand())
+      .attr("y", function(d) { return y(d.cases) + 4; })
+      .attr("height", function(d) { return 142.5 - y(d.cases); });
   }
 
   render() {
