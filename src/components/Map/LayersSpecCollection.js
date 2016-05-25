@@ -15,13 +15,13 @@ class LayersSpecCollection extends Backbone.Collection {
     this.subscriber = map;
   }
 
-  addLayer(id) {
+  addLayer(id, month) {
     const layerSpec = this.get(id);
     const layer = this.getLayer(id);
 
     // Trying to not create a new instance every time
     if (!layer && layerSpec && !layerSpec.instancedLayer) {
-      layerSpec.instanceLayer()
+      layerSpec.instanceLayer(month)
         .createLayer((l) => {
           this.subscriber.addLayer(l);
           const zIndex = layerSpec.get('zIndex');

@@ -106,7 +106,8 @@ class Map extends React.Component {
    * Method to add a layer
    * @param {String} slug
    */
-  addLayer(slug, month) {
+  addLayer(slug) {
+    const month = this.props.month;
     this.layerSpecCollection.addLayer(slug, month);
   }
 

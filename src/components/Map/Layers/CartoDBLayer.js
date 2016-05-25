@@ -123,9 +123,10 @@ class CartoDBLayer {
   _getQuery() {
     if (this.options.sql_template && this.month) {
       const table = 'risk' + this.month;
-      console.log(this.options.sql_template.replace(/TABLE/g, table))
+      console.log('cartoDBLayer', this.options.sql_template.replace(/TABLE/g, table))
       return this.options.sql_template.replace(/TABLE/g, table);
     }
+    console.log('cartoDBLayer', this.options.sql)
     return this.options.sql;
   }
 

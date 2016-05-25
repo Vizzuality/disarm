@@ -184,10 +184,8 @@ class App extends React.Component {
   }
 
   render() {
-
     return (
       <div>
-
         <div className="l-app">
           <Header
             currentRoute= { this.state.route }
