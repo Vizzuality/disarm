@@ -23,7 +23,6 @@ class LayersSpecCollection extends Backbone.Collection {
     if (!layer && layerSpec && !layerSpec.instancedLayer) {
       layerSpec.instanceLayer(month)
         .createLayer((l) => {
-          console.log(l)
           this.subscriber.addLayer(l);
           const zIndex = layerSpec.get('zIndex');
           l.setZIndex(zIndex)
@@ -42,8 +41,11 @@ class LayersSpecCollection extends Backbone.Collection {
 
     //add new instance
     const layerSpec = this.get(id);
+    console.log(layerSpec)
     layerSpec.instanceLayer(currentMonth)
       .createLayer((l) => {
+        //This is important, getting sure that have removed all the layers with the same id before adding a new instance.
+        this.removeLayer(id);
         this.subscriber.addLayer(l);
         const zIndex = layerSpec.get('zIndex');
         l.setZIndex(zIndex)

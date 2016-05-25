@@ -17,19 +17,9 @@ class LayerSpecModel extends Backbone.Model {
     });
   }
 
-  // instanceLayer(month) {
-  //   const MapLayer = mapLayers[this.attributes.type];
-  //   this.instancedLayer = new MapLayer(this.attributes, month);
-  //   return this.instancedLayer;
-  // }
-
   instanceLayer(month) {
     const MapLayer = mapLayers[this.attributes.type];
-    console.log(this.attributes)
     const newInstancedLayer = new MapLayer(this.attributes, month);
-
-    console.log('instance layer', this.instancedLayer)
-    console.log('instance newInstancedLayer', this.newInstancedLayer)
 
     if(!this.instancedLayer || newInstancedLayer.timestamp > this.instancedLayer.timestamp) {
       this.instancedLayer = newInstancedLayer;
