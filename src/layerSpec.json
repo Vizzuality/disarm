@@ -1,17 +1,5 @@
 [
   {
-    "slug": "hfs_with_risk_test",
-    "name": "hfs with risk test",
-    "account": "simbiotica",
-    "type": "cartodb",
-    "sql": "select * from hfs_with_risk_test",
-    "cartocss": "#hfs_with_risk_test {marker-fill: #ff6600; polygon-opacity: 0.5;marker-line-color: #fff;marker-line-width: 1;}",
-    "legend": { "type": "choroplet", "buckets": [{ "literal":"Facilities", "color":"#ff6600"}]},
-    "active": true,
-    "published": true,
-    "zIndex": 1
-  },
-  {
     "slug": "swz_malaria",
     "name": "swz malaria",
     "account": "simbiotica",
@@ -23,21 +11,21 @@
       "raster": true,
       "raster_band": 1
     }],
-    "legend": { "type": "raster", "buckets": [{ "literal":"> 0.4", "color":"#1a9641"}, { "literal":"0.3", "color":"#a6d96a"}, { "literal":"0.2", "color":"#ffffbf"}, { "literal":"0.1", "color":"#fdae61"}, { "literal":"0", "color":"#d7191c"}] },
+    "legend": { "type": "raster", "buckets": [{ "literal":"> 0.4 cases", "color":"#1a9641"}, { "literal":"0.3 cases", "color":"#a6d96a"}, { "literal":"0.2 cases", "color":"#ffffbf"}, { "literal":"0.1 cases", "color":"#fdae61"}, { "literal":"0 cases", "color":"#d7191c"}] },
     "active": false,
     "published": true,
     "zIndex": 0
   },
   {
     "slug": "hfrisk",
-    "name": "hfrisk (facilities)",
+    "name": "facilities",
     "account": "disarm",
     "type": "cartodb",
     "sql": "select * from hfrisk",
     "interactivity": ["facility_name"],
     "cartocss": "#hfs_with_risk_test {marker-fill: #FF6600; polygon-opacity: 0.5;marker-line-color: #FFF;marker-line-width: 1;}",
     "legend": { "type": "choroplet", "buckets": [{ "literal":"Facilities", "color":"#ff6600"}]},
-    "active": false,
+    "active": true,
     "published": true,
     "zIndex": 1
   }

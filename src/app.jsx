@@ -229,6 +229,13 @@ class App extends React.Component {
             </svg>
             <div className="svg-container js-svg-container"></div>
           </div>
+          <div id="map-credits" className="l-map-credits">
+            <div className="leaflet-control-attribution leaflet-control">
+              <a href="http://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> | © 
+              <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> © 
+              <a href="http://cartodb.com/attributions">CartoDB</a>
+            </div>
+         </div>
         </div>
       </div>
     );

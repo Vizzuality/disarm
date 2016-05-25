@@ -8,9 +8,23 @@ const webpack = require('webpack');
 const webpackMiddleware = require('webpack-dev-middleware');
 const config = require('./webpack.config.js');
 const isDevelop = process.env.NODE_ENV !== 'production';
+const auth = require('basic-auth')
 
 // Configuring App
 const app = express();
+
+//Aouth
+app.use(function(req, res, next){
+  var credentials = auth(req)
+
+    if (!credentials || credentials.name !==  process.env.BASIC_AUTH_USERNAME || credentials.pass !== process.env.BASIC_AUTH_PASSWORD ) {
+      res.statusCode = 401
+      res.setHeader('WWW-Authenticate', 'Basic realm="example"')
+      res.end('Access denied')
+    } else {
+      next();
+    }
+});
 
 if (isDevelop) {
   const compiler = webpack(config);
@@ -35,6 +49,7 @@ if (isDevelop) {
   });
 
 } else {
+
   app.use(express.static(__dirname + '/dist'));
 
   // Routes
