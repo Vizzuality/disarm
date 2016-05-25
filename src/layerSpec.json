@@ -1,20 +1,5 @@
 [
   {
-    "slug": "swz_malaria",
-    "name": "swz malaria",
-    "account": "simbiotica",
-    "type": "cartodb",
-    "isRaster": true,
-    "sql": "select * from swz_malaria",
-    "cartocss": "#swz_malaria{raster-scaling:near;raster-colorizer-default-mode:linear;raster-colorizer-default-color: transparent; raster-colorizer-epsilon:0.1;raster-colorizer-stops: stop(0, #1a9641) stop(0.1, #a6d96a) stop(0.3, #ffffbf) stop(0.6, #fdae61) stop(0.8, #d7191c) stop(1, #d7191c)}",
-    "raster": true,
-    "raster_band": 1,
-    "legend": { "type": "raster", "buckets": [{ "literal":"> 0.4 cases", "color":"#1a9641"}, { "literal":"0.3 cases", "color":"#a6d96a"}, { "literal":"0.2 cases", "color":"#ffffbf"}, { "literal":"0.1 cases", "color":"#fdae61"}, { "literal":"0 cases", "color":"#d7191c"}] },
-    "active": false,
-    "published": true,
-    "zIndex": 0
-  },
-  {
     "slug": "hfrisk",
     "name": "facilities",
     "account": "disarm",

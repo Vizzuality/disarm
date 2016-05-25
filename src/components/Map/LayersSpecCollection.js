@@ -39,6 +39,7 @@ class LayersSpecCollection extends Backbone.Collection {
     const layer = this.getLayer(id);
     this.subscriber.removeLayer(layer);
 
+    debugger
     //add new instance
     const layerSpec = this.get(id);
     layerSpec.instanceLayer(currentMonth)
