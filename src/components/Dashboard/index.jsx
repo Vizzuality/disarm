@@ -49,16 +49,18 @@ class Dashboard extends React.Component {
         >
           <svg className="icon icon-arrow"><use xlinkHref="#icon-arrow"></use></svg>
         </button>
-        <h2 className="country-title">Swaziland</h2>
         <div className="content-container">
-          <SwitcherLayers
-            setLayer={ this.props.setLayer.bind(this) }
-          />
-          { this.props.graph === true && <Chart /> }
-          <Share
-            openModal = { this.props.openModal }
-           />
-         </div>
+          <h2 className="country-title">Swaziland</h2>
+          <div className="content">
+            <SwitcherLayers
+              setLayer={ this.props.setLayer.bind(this) }
+            />
+            { this.props.graph === true && <Chart /> }
+            <Share
+              openModal = { this.props.openModal }
+             />
+           </div>
+        </div>
       </div>
     );
   }
