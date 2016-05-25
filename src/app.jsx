@@ -7,6 +7,7 @@ import Backbone from 'backbone';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import moment from 'moment';
+
 import Header from './components/Header';
 import Map from './components/Map';
 import Dashboard from './components/Dashboard';
@@ -16,9 +17,10 @@ import TimelineView from './components/Timeline';
 import Router from './components/Router';
 import LayersSpecCollection from './components/Map/LayersSpecCollection';
 
+import Config from './scripts/config.json';
+
 const mapOptions = {
-  center: [-26.799557733065328, 31.338500976562496], // Swaziland
-  zoom: 9,
+  zoom: 7,
   basemapSpec: {
     url: 'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
     options: {
@@ -56,9 +58,10 @@ class App extends React.Component {
   constructor(props) {
     super(props);
 
+    this.config = Config;
+
     this.state = {
-      layersSpecCollection: LayersSpecCollection,
-      mapOptions: mapOptions,
+      country: this._getCountry(),
       downloadInfoWindow: {
         isHidden: true
       },
@@ -66,9 +69,14 @@ class App extends React.Component {
         isHidden: true
       },
       layers: [],
-      timelineDate: moment.utc('2012-12-01').toDate(),
+      timelineDate: '2012-12-01',
       graph: true
     };
+
+    Object.assign(this.state, {
+      layersSpecCollection: this._getLayersSpec(),
+      mapOptions: this._getMapOptions()
+    });
   }
 
   _setListeners() {
@@ -92,6 +100,45 @@ class App extends React.Component {
     this._getRouterParams();
   }
 
+  _getCountry() {
+    const countries = this.config['countries'];
+    const subdomain = this._getSubdomain();
+
+    let country = countries[countries['default']];
+
+    if (subdomain !== 'localhost' && countries.hasOwnProperty(subdomain)) {
+      country = countries[subdomain];
+    }
+
+    return country;
+  }
+
+  _getLayersSpec() {
+    const countrySlug = this.state.country.slug;
+
+    LayersSpecCollection.setLayersSpec(countrySlug);
+
+    return LayersSpecCollection;
+  }
+
+  _getMapOptions() {
+    const countryMap = this.state.country.map;
+    const countryCenter = [countryMap.latitude, countryMap.longitude]
+
+    Object.assign(mapOptions, {
+      center: countryCenter
+    });
+
+    return mapOptions;
+  }
+
+  _getSubdomain() {
+    const hostname = window.location.hostname;
+    const subdomain = hostname.split('.', 1);
+
+    return subdomain[0];
+  }
+
   updateRouter(params) {
     router.update(params);
   }
@@ -100,10 +147,12 @@ class App extends React.Component {
     const updateTimelineDates = function(dates) {
       console.log('timeline dates', moment.utc(dates.to).format());
       // this.setState({ timelineDates: dates });
+      const timelineDate = moment.utc(dates.to).format('YYYY-MM-DD');
 
       router.update({
-        timelineDate: moment.utc(dates.to).format('YYYY-MM-DD')
+        timelineDate
       });
+      this.setState({timelineDate});
     };
 
     const updateMapDates = function (dates) {
@@ -125,13 +174,12 @@ class App extends React.Component {
       ticksAtExtremities: false
     };
 
-
     this.timeline = new TimelineView(timelineParams);
   }
 
   componentDidMount() {
     this._initTimeline();
-    this._setListeners(); 
+    this._setListeners();
   }
 
   activeLayer(layer) {
@@ -187,10 +235,14 @@ class App extends React.Component {
     this.setState(newState);
   }
 
+  getMonth() {
+    const date = moment(this.state.timelineDate);
+    return date.month()+1;
+  }
+
   render() {
     return (
       <div>
-
         <div className="l-app">
           <Header
             currentRoute= { this.state.route }
@@ -211,9 +263,11 @@ class App extends React.Component {
             onChange={ this.updateRouter.bind(this) }
           />
           <Dashboard
+            country = { this.state.country }
             layersSpecCollection = { this.state.layersSpecCollection }
             setLayer = { this.activeLayer.bind(this) }
             openModal = { this.handleInfowindow.bind(this)}
+            month = { this.getMonth() }
             graph = { this.state.graph }
           />
           <div id="timeline" className="l-timeline m-timeline" ref="Timeline">
