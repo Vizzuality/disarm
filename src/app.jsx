@@ -99,11 +99,11 @@ class App extends React.Component {
   _initTimeline() {
     const updateTimelineDates = function(dates) {
       console.log('timeline dates', moment.utc(dates.to).format());
-      // this.setState({ timelineDates: dates });
 
-      router.update({
-        timelineDate: moment.utc(dates.to).format('YYYY-MM-DD')
-      });
+      const date = moment.utc(dates.to).format('YYYY-MM-DD');
+
+      router.update({ timelineDate: date });
+      this.setState({ timelineDates: date });
     };
 
     const updateMapDates = function (dates) {
@@ -131,7 +131,7 @@ class App extends React.Component {
 
   componentDidMount() {
     this._initTimeline();
-    this._setListeners(); 
+    this._setListeners();
   }
 
   activeLayer(layer) {
@@ -187,6 +187,11 @@ class App extends React.Component {
     this.setState(newState);
   }
 
+  getMonth() {
+    const date = moment(this.state.timelineDate);
+    return date.month()+1;
+  }
+
   render() {
     return (
       <div>
@@ -209,6 +214,8 @@ class App extends React.Component {
             layers = { this.state.layers }
             // onLoad={ this.updateRouter.bind(this) }
             onChange={ this.updateRouter.bind(this) }
+            timelineDate = { this.state.timelineDate }
+            month = {this.getMonth()}
           />
           <Dashboard
             layersSpecCollection = { this.state.layersSpecCollection }

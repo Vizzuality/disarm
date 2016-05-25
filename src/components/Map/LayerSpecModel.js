@@ -17,9 +17,9 @@ class LayerSpecModel extends Backbone.Model {
     });
   }
 
-  instanceLayer() {
+  instanceLayer(month) {
     const MapLayer = mapLayers[this.attributes.type];
-    this.instancedLayer = new MapLayer(this.attributes);
+    this.instancedLayer = new MapLayer(this.attributes, month);
     return this.instancedLayer;
   }
 

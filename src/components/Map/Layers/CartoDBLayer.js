@@ -20,15 +20,16 @@ import infowindowTemplate from '../infowindow.handlebars';
  */
 class CartoDBLayer {
 
-  constructor(props) {
+  constructor(props, month) {
     this.options = props;
+    this.month = month;
   }
 
   createLayer(callback) {
     const account = this.options.account;
     const isRaster = this.options.isRaster ? true : false;
     const hasInteractivity = this.options.hasOwnProperty('interactivity');
-
+    console.log(this.options)
     // common params
     let layersSpec = [{
       user_name: account,
