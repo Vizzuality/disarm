@@ -7,6 +7,7 @@ import Backbone from 'backbone';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import moment from 'moment';
+
 import Header from './components/Header';
 import Map from './components/Map';
 import Dashboard from './components/Dashboard';
@@ -16,9 +17,10 @@ import TimelineView from './components/Timeline';
 import Router from './components/Router';
 import LayersSpecCollection from './components/Map/LayersSpecCollection';
 
+import Config from './scripts/config.json';
+
 const mapOptions = {
-  center: [-26.799557733065328, 31.338500976562496], // Swaziland
-  zoom: 9,
+  zoom: 7,
   basemapSpec: {
     url: 'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
     options: {
@@ -56,9 +58,10 @@ class App extends React.Component {
   constructor(props) {
     super(props);
 
+    this.config = Config;
+
     this.state = {
-      layersSpecCollection: LayersSpecCollection,
-      mapOptions: mapOptions,
+      country: this._getCountry(),
       downloadInfoWindow: {
         isHidden: true
       },
@@ -66,9 +69,14 @@ class App extends React.Component {
         isHidden: true
       },
       layers: [],
-      timelineDate: moment.utc('2012-12-01').toDate(),
+      timelineDate: '2012-12-01',
       graph: true
     };
+
+    Object.assign(this.state, {
+      layersSpecCollection: this._getLayersSpec(),
+      mapOptions: this._getMapOptions()
+    });
   }
 
   _setListeners() {
@@ -92,6 +100,45 @@ class App extends React.Component {
     this._getRouterParams();
   }
 
+  _getCountry() {
+    const countries = this.config['countries'];
+    const subdomain = this._getSubdomain();
+
+    let country = countries[countries['default']];
+
+    if (subdomain !== 'localhost' && countries.hasOwnProperty(subdomain)) {
+      country = countries[subdomain];
+    }
+
+    return country;
+  }
+
+  _getLayersSpec() {
+    const countrySlug = this.state.country.slug;
+
+    LayersSpecCollection.setLayersSpec(countrySlug);
+
+    return LayersSpecCollection;
+  }
+
+  _getMapOptions() {
+    const countryMap = this.state.country.map;
+    const countryCenter = [countryMap.latitude, countryMap.longitude]
+
+    Object.assign(mapOptions, {
+      center: countryCenter
+    });
+
+    return mapOptions;
+  }
+
+  _getSubdomain() {
+    const hostname = window.location.hostname;
+    const subdomain = hostname.split('.', 1);
+
+    return subdomain[0];
+  }
+
   updateRouter(params) {
     router.update(params);
   }
@@ -99,11 +146,10 @@ class App extends React.Component {
   _initTimeline() {
     const updateTimelineDates = function(dates) {
       console.log('timeline dates', moment.utc(dates.to).format());
+      const timelineDate = moment.utc(dates.to).format('YYYY-MM-DD');
 
-      const date = moment.utc(dates.to).format('YYYY-MM-DD');
-
-      router.update({ timelineDate: date });
-      this.setState({ timelineDate: date });
+      router.update({ timelineDate });
+      this.setState({ timelineDate });
     };
 
     const timelineParams = {
@@ -115,7 +161,6 @@ class App extends React.Component {
       triggerTimelineDates: updateTimelineDates.bind(this),
       ticksAtExtremities: false
     };
-
 
     this.timeline = new TimelineView(timelineParams);
   }
@@ -208,9 +253,11 @@ class App extends React.Component {
             month = {this.getMonth()}
           />
           <Dashboard
+            country = { this.state.country }
             layersSpecCollection = { this.state.layersSpecCollection }
             setLayer = { this.activeLayer.bind(this) }
             openModal = { this.handleInfowindow.bind(this)}
+            month = { this.getMonth() }
             graph = { this.state.graph }
           />
           <div id="timeline" className="l-timeline m-timeline" ref="Timeline">
@@ -219,6 +266,13 @@ class App extends React.Component {
             </svg>
             <div className="svg-container js-svg-container"></div>
           </div>
+          <div id="map-credits" className="l-map-credits">
+            <div className="leaflet-control-attribution leaflet-control">
+              <a href="http://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> | © 
+              <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> © 
+              <a href="http://cartodb.com/attributions">CartoDB</a>
+            </div>
+         </div>
         </div>
       </div>
     );

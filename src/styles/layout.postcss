@@ -38,9 +38,19 @@ body {
   left: 0;
   right: 0;
   height: 100%;
+  overflow-y: hidden;
 
   .logo {
     pointer-events: auto;
+  }
+
+  .leaflet-control-attribution {
+    float: right;
+    font-size: rem(11);
+    color: $color-1;
+    & a {
+      color: $color-1;
+    }
   }
 }
 
@@ -126,22 +136,44 @@ body {
 .l-dashboard {
   position: absolute;
   box-sizing: border-box;
-  width: rem(360);
-  top: rem(100);
-  left: rem(65);
-  bottom: rem(150);
-  padding: rem(15);
+  width: 100%;
+  height: rem(200);
+  left: 0;
+  bottom: rem(61) !important;
   background: $white;
   z-index: 2;
-  overflow: auto;
+  transition: transform .2s ease-out;
+  transform: translatey(194px);
 
   @media screen and (min-width: $screen-m) {
+    position: absolute;
+    height: auto;
+    width: rem(360);
     top: rem(130);
-    left: rem(75);
+    left: rem(65);
+    bottom: rem(150) !important;
+    left: $wrap-padding-desktop;
+    transform: translatex(-420px);
   }
 
-  @media screen and (max-height: rem(650)) {
-    bottom: rem(100);
+ 
+  &.is-open {
+    @media screen and (min-width: $screen-m) {
+      top: rem(130);
+      left: rem(75);
+    }
+
+    @media screen and (max-height: rem(650)) {
+      bottom: rem(100);
+    }
+
+    &.-pc {
+      transform: translatex(0);
+    }
+
+    &.-mobile {
+      transform: translatey(0);
+    }
   }
 }
 
@@ -150,14 +182,14 @@ body {
   margin: 0;
 }
 
-
 .l-timeline {
   position: absolute;
-  bottom: rem($credits-height-mb);
+  bottom: rem(16);
   left: 0;
   right: 0;
   height: rem($timeline-height-mb);
   border-top: 1px solid $beige-7;
+  background-color: lightgrey;
 
   @media screen and (min-width: $screen-m) {
     border-top: 0;
@@ -165,9 +197,24 @@ body {
     right: 260px;
     left: $wrap-padding-desktop;
     bottom: rem($l-margin-vt);
+    background-color: none;
   }
 
   @media screen and (min-width: $screen-xl) {
     left: $wrap-padding-desktop-xl;
   }
+}
+
+.l-map-credits {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: rem(16);
+  background-color: lightgrey;
+  z-index: 9;
+
+  @media screen and (min-width: $screen-m) {
+    display: none;
+  }
+
 }
