@@ -23,6 +23,7 @@ class CartoDBLayer {
   constructor(props, month) {
     this.options = props;
     this.month = month;
+    this.timestamp = +(new Date());
   }
 
   createLayer(callback) {
@@ -148,6 +149,7 @@ class CartoDBLayer {
     // Creating layer if layer doesn't exist
     this.createLayer((layer) => {
       this.layer = layer;
+      
       map.addLayer(this.layer);
       if (callback && typeof callback === 'function') {
         callback(this.layer);
