@@ -1,14 +1,98 @@
 @import './../../styles/settings.postcss';
 
-.c-dashboard {
-  padding: rem(30);
 
-  .country-title {
-    margin: 0;
-    font-family: $font-family-1;
-    font-size: rem(40);
-    letter-spacing: rem(-1);
-    color: $font-color-1;
-    text-transform: uppercase;
+
+.country-title {
+	margin: 0;
+	font-family: $font-family-1;
+	font-size: rem(40);
+	letter-spacing: rem(-1);
+	color: $font-color-1;
+	text-transform: uppercase;
+}
+
+.btn-dashboard-switcher {
+  flex: 1 1 100%;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  width: rem(35);
+  height: rem(25);
+  background-color: $color-1;
+  background-size: contain;
+
+  @media screen and (min-width: $screen-m) {
+    width: rem(35);
+    height: rem(35);
   }
+
+  &:hover .icon > use {
+    fill: $color-5;
+  }
+
+  .icon {
+      display: block;
+      width: rem(7);
+      height: rem(8);
+      width: 100%;
+      transform: rotate(180deg);
+      > use { fill: $color-5; }
+
+      @media screen and (min-width: $screen-m) {
+        width: rem(10);
+        height: rem(10);
+      }
+  }
+
+  .is-open & {
+    .icon {
+        transform: rotate(0);
+    }
+  }
+
+  &.-left {
+    display: none;
+
+    @media screen and (min-width: $screen-m) {
+      display: flex;
+      top: rem(54);
+      right: rem(-35);
+    }
+
+    @media screen and (min-width: $screen-xl) {
+      display: none;
+    }
+  }
+
+  &.-bottom {
+    display: flex;
+    top: rem(-25);
+    left: rem(17);
+    box-shadow: 0 rem(-0.5) rem(1) #888;
+
+    @media screen and (min-width: $screen-m) {
+      display: none;
+    }
+  }
+}
+
+button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    padding: 0;
+    box-shadow: none;
+    background: none;
+    border: 0;
+    text-decoration: none;
+    outline: none;
+
+    &:hover {
+    	cursor: pointer;
+    }
+}
+
+.content-container {
+	height: 100%;
+	overflow: auto;
 }
