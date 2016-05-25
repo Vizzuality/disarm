@@ -103,15 +103,7 @@ class App extends React.Component {
       const date = moment.utc(dates.to).format('YYYY-MM-DD');
 
       router.update({ timelineDate: date });
-      this.setState({ timelineDates: date });
-    };
-
-    const updateMapDates = function (dates) {
-      // this.setState({ mapDates: dates });
-
-      //MAP STATE CHANGE
-      // console.log(dates);
-      // this.mapView.state.set({ timelineDates: dates });
+      this.setState({ timelineDate: date });
     };
 
     const timelineParams = {
@@ -121,7 +113,6 @@ class App extends React.Component {
         unit: d3.time.month
       },
       triggerTimelineDates: updateTimelineDates.bind(this),
-      triggerMapDates: updateMapDates.bind(this),
       ticksAtExtremities: false
     };
 
@@ -193,6 +184,7 @@ class App extends React.Component {
   }
 
   render() {
+
     return (
       <div>
 

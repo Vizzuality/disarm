@@ -29,7 +29,6 @@ class CartoDBLayer {
     const account = this.options.account;
     const isRaster = this.options.isRaster ? true : false;
     const hasInteractivity = this.options.hasOwnProperty('interactivity');
-    console.log(this.options)
     // common params
     let layersSpec = [{
       user_name: account,
@@ -40,7 +39,7 @@ class CartoDBLayer {
 
       const layersParams = {
         options: {
-          sql: this.options.sql,
+          sql: this._getQuery(),
           cartocss: this.options.cartocss,
           cartocss_version: '2.3.0'
         }
@@ -52,7 +51,7 @@ class CartoDBLayer {
 
       const rasterParams = {
         options: {
-          sql: this.options.sql,
+          sql: this._getQuery(),
           cartocss: this.options.cartocss,
           raster: this.options.raster,
           raster_band: this.options.raster_band,
@@ -119,6 +118,15 @@ class CartoDBLayer {
         }
       });
     }
+  }
+
+  _getQuery() {
+    if (this.options.sql_template && this.month) {
+      const table = 'risk' + this.month;
+      console.log(this.options.sql_template.replace(/TABLE/g, table))
+      return this.options.sql_template.replace(/TABLE/g, table);
+    }
+    return this.options.sql;
   }
 
   /**
