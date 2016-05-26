@@ -1,0 +1,27 @@
+{
+  "cartodb": {
+    "user_name": "disarm"
+  },
+
+  "countries": {
+    "swaziland": {
+      "name": "Swaziland",
+      "slug": "swaziland",
+      "prefix": "_swaz",
+      "map": {
+        "longitude": "31.338500976562496",
+        "latitude": "-26.799557733065328"
+      }
+    },
+    "zimbabwe": {
+      "name":"Zimbabwe",
+      "slug": "zimbabwe",
+      "prefix": "_zim",
+      "map": {
+        "longitude": "29.5751953125",
+        "latitude": "-19.155546551403607"
+      }
+    },
+    "default": "swaziland"
+  }
+}

@@ -3,6 +3,7 @@
 import './styles.postcss';
 
 import React from 'react';
+import Legend from './../Legend';
 
 class SwitcherItem extends React.Component {
 
@@ -32,19 +33,27 @@ class SwitcherItem extends React.Component {
 
   render() {
     return (
-      <div className="c-switcher--wrapper">
-        <div className="c-switcher">
-          <input
-          type="checkbox"
-          name="layer-item"
-          id={this.state.name}
-          onChange={ this._toggleStatus.bind(this) }
-          setLayer={this.props.setLayer.bind(this)}
-          defaultChecked={this.state.active}
-          />
-          <label htmlFor={this.state.name}></label>
+      <div>
+        <div className="c-switcher--wrapper">
+          <div className="c-switcher">
+            <input
+            type="checkbox"
+            name="layer-item"
+            id={this.state.name}
+            onChange={ this._toggleStatus.bind(this) }
+            setLayer={this.props.setLayer.bind(this)}
+            defaultChecked={this.state.active}
+            />
+            <label htmlFor={this.state.name}></label>
+          </div>
+          <span className="c-switcher--label"> { this.props.name }</span>
         </div>
-        <span className="c-switcher--label"> { this.props.name }</span>
+
+        {this.state.active && <Legend
+          slug={this.props.slug}
+          name={this.props.name}
+        />}
+
       </div>
     );
   }

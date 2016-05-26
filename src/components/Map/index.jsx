@@ -92,11 +92,23 @@ class Map extends React.Component {
   }
 
   /**
+   * This method will update only active layers with historic info
+   */
+  _updateHIstoricLayers(currentMonth) {
+     _.each(this.layerSpecCollection.models, layerSpec => {
+      if (layerSpec.get('active') && layerSpec.get('historic')) {
+        this.layerSpecCollection.updateLayer(layerSpec.id, currentMonth);
+      }
+    });
+  }
+
+  /**
    * Method to add a layer
    * @param {String} slug
    */
   addLayer(slug) {
-    this.layerSpecCollection.addLayer(slug);
+    const month = this.props.month;
+    this.layerSpecCollection.addLayer(slug, month);
   }
 
   /**
@@ -112,10 +124,15 @@ class Map extends React.Component {
       lat: nextProps.mapOptions.center[0],
       lng: nextProps.mapOptions.center[1],
       zoom: nextProps.mapOptions.zoom,
-      layer: nextProps.mapOptions.layer
+      layer: nextProps.mapOptions.layer,
+      timelineDate: nextProps.timelineDate,
+      month: nextProps.month
     };
     this.map.setView(nextProps.mapOptions.center, nextProps.mapOptions.zoom);
-    // this.setState(nextState);
+
+    if (nextProps.month) {
+      this._updateHIstoricLayers(nextProps.month)
+    }
   }
 
   /**
@@ -131,7 +148,7 @@ class Map extends React.Component {
    * Avoid render, this component doesn't use Virtual DOM
    * @return false
    */
-  shouldComponentUpdate() {
+  shouldComponentUpdate(nextProps) {
     return false;
   }
 

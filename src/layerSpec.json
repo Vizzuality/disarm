@@ -1,28 +1,33 @@
 [
   {
-    "slug": "hfs_with_risk_test",
-    "name": "hfs with risk test",
-    "account": "simbiotica",
+    "slug": "hfrisk",
+    "name": "facilities",
+    "account": "disarm",
+    "country": "swaziland",
     "type": "cartodb",
-    "sql": "select * from hfs_with_risk_test",
+    "sql": "select * from hfrisk",
+    "interactivity": ["facility_name"],
     "cartocss": "#hfs_with_risk_test {marker-fill: #FF6600; polygon-opacity: 0.5;marker-line-color: #FFF;marker-line-width: 1;}",
+    "legend": { "type": "choroplet", "buckets": [{ "literal":"Facilities", "color":"#ff6600"}]},
     "active": true,
     "published": true,
     "zIndex": 1
   },
   {
-    "slug": "swz_malaria",
-    "name": "swz malaria",
-    "account": "simbiotica",
+    "slug": "risk",
+    "name": "risk",
+    "account": "disarm",
+    "country": "swaziland",
     "type": "cartodb",
     "isRaster": true,
-    "sublayers": [{
-      "sql": "select * from swz_malaria",
-      "cartocss": "#swz_malaria{raster-scaling:near;raster-colorizer-default-mode:linear;raster-colorizer-default-color: transparent; raster-colorizer-epsilon:0.1;raster-colorizer-stops: stop(0, #1a9641) stop(0.1, #a6d96a) stop(0.3, #ffffbf) stop(0.6, #fdae61) stop(0.8, #d7191c) stop(1, #d7191c)}",
-      "raster": true,
-      "raster_band": 1
-    }],
+    "sql": "select * from risk1",
+    "sql_template": "select * from TABLE",
+    "cartocss": "#risk{raster-scaling:near;raster-colorizer-default-mode:linear;raster-colorizer-default-color: transparent; raster-colorizer-epsilon:0.1;raster-colorizer-stops: stop(0.00000001, #1a9641) stop(0.0001, #a6d96a) stop(0.0002, #ffffbf) stop(0.0003, #fdae61) stop(0.0035, #d7191c)}",
+    "raster": true,
+    "raster_band": 1,
+    "legend": { "type": "raster", "buckets": [{  "literal": "0 cases", "color": "#1a9641" }, { "literal": "0.1 cases", "color": "#a6d96a" }, { "literal": "0.2 cases", "color": "#ffffbf" }, { "literal": "0.3 cases", "color": "#fdae61" }, { "literal": "> 0.4 cases", "color": "#d7191c" }] },
     "active": false,
+    "historic": true,
     "published": true,
     "zIndex": 0
   }

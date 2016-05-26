@@ -1,31 +1,36 @@
 @import './settings.postcss';
+@import './helpers.postcss';
 
 .btn {
-  border: 0;
-  outline: 0;
-  background: none;
-
-  font-size: rem(18);
-  text-transform: uppercase;
-
+  @extend %clean-button-or-input;
+	padding: rem(15) rem(55);
+	display: inline-block;
+	text-decoration: none;
+	text-align: center;
+	text-transform: uppercase;
+	/*font-family: $font-family-1;*/
+  font-weight: 700;
+  font-size: rem(11);
+  letter-spacing: rem(0.1);
   cursor: pointer;
+  transition: .3s background-color;
 
-  &.-gray {
-    padding: rem(15) rem(30);
-    color: $color-5;
-    background-color: $color-1;
+  &.-small {
+		padding: rem(10) rem(35);
   }
 
-  &.-disabled {
-    opacity: .3;
-    cursor: default;
-  }
-}
+	&.is-disabled {
+	  opacity: .5;
+	  pointer-events: none;
+	}
 
-.btn-map {
-  padding: 0 rem(20);
-}
 
-.btn-about {
-  padding: 0 rem(40);
+	@media screen and (min-width: $screen-m) {
+	  padding: rem(15) rem(55);
+	}
+
+	@media screen and (min-width: $screen-xl) {
+		font-size: rem(12);
+		letter-spacing: rem(2.3);
+	}
 }

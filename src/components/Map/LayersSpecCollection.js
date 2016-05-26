@@ -15,12 +15,13 @@ class LayersSpecCollection extends Backbone.Collection {
     this.subscriber = map;
   }
 
-  addLayer(id) {
+  addLayer(id, month) {
     const layerSpec = this.get(id);
     const layer = this.getLayer(id);
+
     // Trying to not create a new instance every time
     if (!layer && layerSpec && !layerSpec.instancedLayer) {
-      layerSpec.instanceLayer()
+      layerSpec.instanceLayer(month)
         .createLayer((l) => {
           this.subscriber.addLayer(l);
           const zIndex = layerSpec.get('zIndex');
@@ -33,13 +34,33 @@ class LayersSpecCollection extends Backbone.Collection {
     }
   }
 
+  updateLayer(id, currentMonth) {
+    //Remove current
+    const layer = this.getLayer(id);
+    if (layer) {
+      this.subscriber.removeLayer(layer);
+    }
+
+    //add new instance but just after removing the current one with same id
+    const layerSpec = this.get(id);
+    console.log(layerSpec)
+    layerSpec.instanceLayer(currentMonth)
+      .createLayer((l) => {
+        //This is important, getting sure that have removed all the layers with the same id before adding a new instance.
+        this.removeLayer(id);
+        this.subscriber.addLayer(l);
+        const zIndex = layerSpec.get('zIndex');
+        l.setZIndex(zIndex)
+        this._layers[id] = l;
+      });
+  }
+
   removeLayer(id) {
     const layer = this.getLayer(id);
     if (layer) {
       this.subscriber.removeLayer(layer);
       this.clearLayer(id);
     }
-
   }
 
   getLayer(id) {
@@ -66,6 +87,12 @@ class LayersSpecCollection extends Backbone.Collection {
     });
 
     this.reset(layerClone);
+  }
+
+  setLayersSpec(countrySlug) {
+    const countryLayersSpec = this.where({ country: countrySlug });
+
+    this.reset(countryLayersSpec);
   }
 }
 

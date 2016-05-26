@@ -252,7 +252,7 @@ class TimelineView extends Backbone.View {
       this.moveCursor(this.options.domain[0]);
     }
 
-    this.animationFrame = setInterval(this.renderAnimationFrame.bind(this), 1000)
+    this.animationFrame = setInterval(this.renderAnimationFrame.bind(this), 3000)
   }
 
   stop() {
@@ -352,8 +352,7 @@ class TimelineView extends Backbone.View {
     if(date < this.options.domain[0]) date = this.options.domain[0];
 
     /* We trigger the range currently selected in the timeline*/
-    if ( date.getDate() === 1 && this.cursorPosition.date() !== 1 ) this.triggerCursorDate(date);
-
+    if ( date.getDate() === 1 && this.cursorPosition && this.cursorPosition.date() !== 1 ) this.triggerCursorDate(date);
 
     const dataIndex = this.getClosestDataIndex(date);
     if(dataIndex !== this.currentDataIndex) {
@@ -421,9 +420,6 @@ TimelineView.prototype.triggerCursorDate = (function() {
 /* As the method needs to be debounce, we need to declare it outside of the
  * class or create it as an instance method */
 TimelineView.prototype.triggerCurrentData = (function() {
-  const triggerMapDates = _.debounce(function(dates) {
-    this.options.triggerMapDates(dates);
-  }, 100);
 
   return function() {
     const startDate  = moment.utc(this.scale.domain()[0]).toDate();
@@ -434,11 +430,6 @@ TimelineView.prototype.triggerCurrentData = (function() {
       dataDate  = this.options.data[this.currentDataIndex].date;
     }
 
-    /* We trigger the range show with the last date with data */
-    triggerMapDates.call(this, {
-      from: startDate,
-      to: dataDate
-    });
   };
 })();
 
