@@ -1,11 +1,5 @@
 @import './settings.postcss';
 
-
-$timeline-height: 75;
-$timeline-height-mb: 70;
-$credits-height-mb: 25;
-$l-margin-vt: 40;
-
 body {
   margin: 0;
   padding: 0;
@@ -103,10 +97,14 @@ body {
   left: 0;
   right: 0;
   height: rem($header-height-mb);
-  z-index: 2;
+  z-index: 1;
 
   @media screen and (min-width: $screen-m) {
     height: rem($header-height);
+  }
+
+  @media screen and (min-width: $screen-xl) {
+    height: rem($header-height-xl);
   }
 
   > .wrap {
@@ -114,6 +112,10 @@ body {
     flex: 1 1 100%;
     justify-content: space-between;
     align-items: center;
+  }
+
+  .menu-link:hover {
+    color: $color-1;
   }
 }
 

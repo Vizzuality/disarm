@@ -1,0 +1,106 @@
+@import'../../styles/settings.postcss';
+@import'../../styles/buttons.postcss';
+@import'../../styles/icons.postcss';
+
+.m-menu--device {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 10;
+  height: 100vh;
+  width: 100%;
+  transform: translatex(100%);
+  transition: transform .2s ease-out;
+
+  @media screen and (min-width: $screen-m) {
+    display: none;
+  }
+
+  .background-viel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: $color-4;
+    opacity: 0;
+    transition: opacity .1s ease-out;
+  }
+
+  .menu-content {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 90%;
+    height: 100%;
+    padding-top: rem(55);
+
+    background-color: $white-bone;
+  }
+
+  &.is-visible {
+    transform: translatex(0);
+
+    .background-viel {
+      opacity: 0.2;
+      transition: opacity 3s ease-out;
+    }
+  }
+
+  .btn-close-menu {
+    @extend %clean-button-or-input;
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: rem(20);
+    cursor: pointer;
+
+    .icon {
+      width: rem(15);
+      height: rem(15);
+      fill: $color-1;
+    }
+  }
+
+  .wrap {
+    width: 90%;
+  }
+
+  .icon {
+    display: inline-block;
+    width: rem(14);
+    height: rem(14);
+    fill: $color-1;
+  }
+
+  .menu {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    li {
+      width: 100%;
+      padding: rem(30) 0;
+      text-align: center;
+      border-top: rem(1) solid $beige-4;
+
+      &:last-child {
+        border-bottom: rem(1) solid $beige-4;
+      }
+
+      &.is-active {
+        border-left: rem(4) solid $color-1;
+      }
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.5);
+      }
+    }
+  }
+
+  .menu-link {
+    text-decoration: none;
+    text-transform: uppercase;
+    color: $font-color-1;
+  }
+}
