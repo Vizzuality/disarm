@@ -67,6 +67,12 @@ class LayersSpecCollection extends Backbone.Collection {
 
     this.reset(layerClone);
   }
+
+  setLayersSpec(countrySlug) {
+    const countryLayersSpec = this.where({ country: countrySlug });
+    
+    this.reset(countryLayersSpec);
+  }
 }
 
 LayersSpecCollection.prototype.model = LayerSpecModel;

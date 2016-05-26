@@ -3,6 +3,7 @@
     "slug": "swz_malaria",
     "name": "swz malaria",
     "account": "simbiotica",
+    "country": "zimbabwe",
     "type": "cartodb",
     "isRaster": true,
     "sublayers": [{
@@ -12,7 +13,7 @@
       "raster_band": 1
     }],
     "legend": { "type": "raster", "buckets": [{ "literal":"> 0.4 cases", "color":"#1a9641"}, { "literal":"0.3 cases", "color":"#a6d96a"}, { "literal":"0.2 cases", "color":"#ffffbf"}, { "literal":"0.1 cases", "color":"#fdae61"}, { "literal":"0 cases", "color":"#d7191c"}] },
-    "active": false,
+    "active": true,
     "published": true,
     "zIndex": 0
   },
@@ -20,6 +21,7 @@
     "slug": "hfrisk",
     "name": "facilities",
     "account": "disarm",
+    "country": "swaziland",
     "type": "cartodb",
     "sql": "select * from hfrisk",
     "interactivity": ["facility_name"],

@@ -7,7 +7,9 @@ import Backbone from 'backbone';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import moment from 'moment';
+
 import Header from './components/Header';
+import MenuDevice from './components/MenuDevice'
 import Map from './components/Map';
 import Dashboard from './components/Dashboard';
 import DownloadInfoWindow from './components/Infowindow/Download';
@@ -16,9 +18,13 @@ import TimelineView from './components/Timeline';
 import Router from './components/Router';
 import LayersSpecCollection from './components/Map/LayersSpecCollection';
 
+
+import Config from './scripts/config.json';
+import utils from './scripts/helpers/utils';
+
+
 const mapOptions = {
-  center: [-26.799557733065328, 31.338500976562496], // Swaziland
-  zoom: 9,
+  zoom: 7,
   basemapSpec: {
     url: 'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
     options: {
@@ -56,19 +62,26 @@ class App extends React.Component {
   constructor(props) {
     super(props);
 
+    this.config = Config;
+
     this.state = {
-      layersSpecCollection: LayersSpecCollection,
-      mapOptions: mapOptions,
+      country: this._getCountry(),
       downloadInfoWindow: {
         isHidden: true
       },
       tableInfoWindow: {
         isHidden: true
       },
+      menuDeviceOpen: false,
       layers: [],
       timelineDate: '2012-12-01',
       graph: true
     };
+
+    Object.assign(this.state, {
+      layersSpecCollection: this._getLayersSpec(),
+      mapOptions: this._getMapOptions(),
+    });
   }
 
   _setListeners() {
@@ -90,10 +103,55 @@ class App extends React.Component {
     });
 
     this._getRouterParams();
+
+    Object.assign(this.state, utils.checkDevice())
+  }
+
+  _getCountry() {
+    const countries = this.config['countries'];
+    const subdomain = this._getSubdomain();
+
+    let country = countries[countries['default']];
+
+    if (subdomain !== 'localhost' && countries.hasOwnProperty(subdomain)) {
+      country = countries[subdomain];
+    }
+
+    return country;
+  }
+
+  _getLayersSpec() {
+    const countrySlug = this.state.country.slug;
+
+    LayersSpecCollection.setLayersSpec(countrySlug);
+
+    return LayersSpecCollection;
+  }
+
+  _getMapOptions() {
+    const countryMap = this.state.country.map;
+    const countryCenter = [countryMap.latitude, countryMap.longitude]
+
+    Object.assign(mapOptions, {
+      center: countryCenter
+    });
+
+    return mapOptions;
+  }
+
+  _getSubdomain() {
+    const hostname = window.location.hostname;
+    const subdomain = hostname.split('.', 1);
+
+    return subdomain[0];
   }
 
   updateRouter(params) {
     router.update(params);
+  }
+
+  toggleMenu() {
+	 this.setState({ menuDeviceOpen: !this.state.menuDeviceOpen });
   }
 
   _initTimeline() {
@@ -127,13 +185,12 @@ class App extends React.Component {
       ticksAtExtremities: false
     };
 
-
     this.timeline = new TimelineView(timelineParams);
   }
 
   componentDidMount() {
     this._initTimeline();
-    this._setListeners(); 
+    this._setListeners();
   }
 
   activeLayer(layer) {
@@ -201,7 +258,13 @@ class App extends React.Component {
           <Header
             currentRoute= { this.state.route }
             onChangeRoute= { this.onChangeRoute.bind(this) }
+            toggleMenuFn = { this.toggleMenu.bind(this) }
            />
+          {this.state.mobile && <MenuDevice
+            currentRoute = { this.state.route }
+            deviceMenuOpen = { this.state.menuDeviceOpen }
+            toggleMenuFn = { this.toggleMenu.bind(this) }
+          /> }
           <TableInfoWindow
             isHidden= {this.state.tableInfoWindow.isHidden}
             onClose={this.handleInfowindow.bind(this, 'tableInfoWindow')}
@@ -217,6 +280,7 @@ class App extends React.Component {
             onChange={ this.updateRouter.bind(this) }
           />
           <Dashboard
+            country = { this.state.country }
             layersSpecCollection = { this.state.layersSpecCollection }
             setLayer = { this.activeLayer.bind(this) }
             openModal = { this.handleInfowindow.bind(this)}

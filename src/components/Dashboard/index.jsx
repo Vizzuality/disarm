@@ -27,7 +27,6 @@ class Dashboard extends React.Component {
     this.setState({ dashboardOpen: !this.state.dashboardOpen })
   }
 
-
   render() {
   const dashboardClass = this.state.dashboardOpen ?
     this.state.mobile ?
