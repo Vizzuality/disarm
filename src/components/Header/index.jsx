@@ -11,27 +11,31 @@ class Header extends React.Component {
   }
 
   render() {
-    const isMap = this.props.currentRoute == 'map' && '-current';
-    const isAbout = this.props.currentRoute == 'about' && '-current';
-
     return (
-      <div className="l-header c-header">
+      <div id="header" className="l-header">
         <div className="wrap">
-          <div className="c-logo">
-            <a href="/">
-              <h1>Disarm core</h1><span className="beta">beta</span>
-            </a>
-          </div>
-          <nav className="c-navigation">
-            <ul>
-              <li className={`${isMap} btn-map`}>
-                <a onClick={ this.props.onChangeRoute.bind(this, 'map') } href="#map">Map</a>
-              </li>
-              <li className={`${isAbout} btn-about`}>
-                <a onClick={ this.props.onChangeRoute.bind(this, 'about') } href="#about">About</a>
-              </li>
+          <a href="/" className="logo">
+            <h1>Disarm core</h1><span className="beta">beta</span>
+          </a>
+
+          <div className="m-main-menu">
+            <button
+              className="btn-menu-toggle"
+              onClick={ this.props.toggleMenuFn }
+            >
+              <svg className="icon icon-menu">
+                <use xlinkHref="#icon-menu"></use>
+              </svg>
+            </button>
+
+            <ul className="menu">
+              <li className={ this.props.currentRoute == 'map' ? 'is-active menu-link' : '' }>
+                <a onClick={ this.props.onChangeRoute.bind(this, 'map') } className="menu-link" href="/" >Map</a></li>
+              <li className={ this.props.currentRoute == 'about' ? 'is-active menu-link' : '' }>
+                <a onClick={ this.props.onChangeRoute.bind(this, 'about') }  className="menu-link" href="#about" >About</a></li>
             </ul>
-          </nav>
+          </div>
+
         </div>
       </div>
     );

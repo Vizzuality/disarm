@@ -9,6 +9,7 @@ import ReactDOM from 'react-dom';
 import moment from 'moment';
 
 import Header from './components/Header';
+import MenuDevice from './components/MenuDevice'
 import Map from './components/Map';
 import Dashboard from './components/Dashboard';
 import DownloadInfoWindow from './components/Infowindow/Download';
@@ -17,7 +18,10 @@ import TimelineView from './components/Timeline';
 import Router from './components/Router';
 import LayersSpecCollection from './components/Map/LayersSpecCollection';
 
+
 import Config from './scripts/config.json';
+import utils from './scripts/helpers/utils';
+
 
 const mapOptions = {
   zoom: 7,
@@ -68,6 +72,7 @@ class App extends React.Component {
       tableInfoWindow: {
         isHidden: true
       },
+      menuDeviceOpen: false,
       layers: [],
       timelineDate: '2012-12-01',
       graph: true
@@ -75,7 +80,7 @@ class App extends React.Component {
 
     Object.assign(this.state, {
       layersSpecCollection: this._getLayersSpec(),
-      mapOptions: this._getMapOptions()
+      mapOptions: this._getMapOptions(),
     });
   }
 
@@ -98,6 +103,8 @@ class App extends React.Component {
     });
 
     this._getRouterParams();
+
+    Object.assign(this.state, utils.checkDevice())
   }
 
   _getCountry() {
@@ -141,6 +148,10 @@ class App extends React.Component {
 
   updateRouter(params) {
     router.update(params);
+  }
+
+  toggleMenu() {
+	 this.setState({ menuDeviceOpen: !this.state.menuDeviceOpen });
   }
 
   _initTimeline() {
@@ -235,7 +246,13 @@ class App extends React.Component {
           <Header
             currentRoute= { this.state.route }
             onChangeRoute= { this.onChangeRoute.bind(this) }
+            toggleMenuFn = { this.toggleMenu.bind(this) }
            />
+          {this.state.mobile && <MenuDevice
+            currentRoute = { this.state.route }
+            deviceMenuOpen = { this.state.menuDeviceOpen }
+            toggleMenuFn = { this.toggleMenu.bind(this) }
+          /> }
           <TableInfoWindow
             isHidden= {this.state.tableInfoWindow.isHidden}
             onClose={this.handleInfowindow.bind(this, 'tableInfoWindow')}
