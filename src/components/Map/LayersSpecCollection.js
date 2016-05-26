@@ -35,6 +35,12 @@ class LayersSpecCollection extends Backbone.Collection {
   }
 
   updateLayer(id, currentMonth) {
+    //Remove current
+    const layer = this.getLayer(id);
+    if (layer) {
+      this.subscriber.removeLayer(layer);
+    }
+
     //add new instance but just after removing the current one with same id
     const layerSpec = this.get(id);
     console.log(layerSpec)
@@ -85,7 +91,7 @@ class LayersSpecCollection extends Backbone.Collection {
 
   setLayersSpec(countrySlug) {
     const countryLayersSpec = this.where({ country: countrySlug });
-    
+
     this.reset(countryLayersSpec);
   }
 }
