@@ -342,7 +342,7 @@ class TimelineView extends Backbone.View {
   }
 
   onCursorDrag() {
-    //TODO - send data only when crossing month point.
+    // TODO - send data only when crossing month point.
     if(!d3.event.sourceEvent) return;
 
     this.cursorShadow.attr('filter', 'url(#cursorShadow)');
@@ -352,13 +352,13 @@ class TimelineView extends Backbone.View {
     if(date < this.options.domain[0]) date = this.options.domain[0];
 
     /* We trigger the range currently selected in the timeline*/
-    if ( date.getDate() === 1 && this.cursorPosition && this.cursorPosition.date() !== 1 ) this.triggerCursorDate(date);
+    // if ( date.getDate() === 1 && this.cursorPosition && this.cursorPosition.date() !== 1 ) this.triggerCursorDate(date);
 
     const dataIndex = this.getClosestDataIndex(date);
     if(dataIndex !== this.currentDataIndex) {
       this.currentDataIndex = this.getClosestDataIndex(date);
       /* We trigger the range of the currently available data */
-      this.triggerCurrentData();
+      // this.triggerCurrentData();
     }
     this.cursorPosition = moment.utc(date);
     this.moveCursor(date);

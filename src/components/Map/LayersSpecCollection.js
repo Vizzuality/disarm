@@ -43,7 +43,7 @@ class LayersSpecCollection extends Backbone.Collection {
 
     //add new instance but just after removing the current one with same id
     const layerSpec = this.get(id);
-    console.log(layerSpec)
+    // console.log(layerSpec)
     layerSpec.instanceLayer(currentMonth)
       .createLayer((l) => {
         //This is important, getting sure that have removed all the layers with the same id before adding a new instance.
