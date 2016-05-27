@@ -158,7 +158,11 @@ body {
     transform: translatex(-420px);
   }
 
- 
+  @media screen and (min-width: $screen-xl) {
+    transform: translatex(0);
+  }
+
+
   &.is-open {
     @media screen and (min-width: $screen-m) {
       top: rem(130);
