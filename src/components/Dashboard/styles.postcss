@@ -109,11 +109,19 @@ button {
 }
 
 .content {
-  height: 100%;
+  position: absolute;
+  top: rem(50);
+  left: 0;
+  bottom: 0;
+  padding-right: rem(20);
+  padding-left: rem(20);
+  //height: 100%;
 	overflow: auto;
 
   @media screen and (min-width: $screen-m) {
-    height: auto;
+    position: initial;
+    padding-right: 0;
+    padding-left: 0;
     overflow: hidden;
   }
 }

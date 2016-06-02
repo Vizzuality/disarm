@@ -6,6 +6,7 @@ import d3 from 'd3';
 import $ from 'jquery';
 import moment from 'moment';
 import chartCollection from './../../scripts/collections/chartCollection';
+import utils from './../../scripts/helpers/utils';
 
 class Chart extends React.Component {
 
@@ -15,6 +16,10 @@ class Chart extends React.Component {
       data: []
     };
     this.maxCases = 0;
+  }
+
+  componentWillMount() {
+    this.setState(utils.checkDevice());
   }
 
   printChart() {
@@ -66,7 +71,7 @@ class Chart extends React.Component {
 
   setChart() {
     const data = this.state.data,
-      width = 269,
+      width = this.state.mobile ? 239 : 269,
       height = 140;
 
     if(document.getElementsByClassName('chart')[0].childNodes[0]) {
